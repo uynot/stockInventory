@@ -21,7 +21,7 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 	@Override
 	public List<CapsuleStock> get() {
 		Session currentSession = em.unwrap(Session.class);
-		Query<CapsuleStock> query = currentSession.createQuery("from CapsuleStock", CapsuleStock.class);
+		Query<CapsuleStock> query = currentSession.createQuery("from capsuleStock", CapsuleStock.class);
 		List<CapsuleStock> capsuleList = query.getResultList();
 		return capsuleList;
 	}

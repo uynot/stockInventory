@@ -1,4 +1,4 @@
-package uy.csgoinvestment.springcrud.springbootcrudapi;
+package stock.inventory.springbootcrudapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
