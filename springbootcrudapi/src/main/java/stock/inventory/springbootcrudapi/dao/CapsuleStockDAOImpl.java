@@ -19,7 +19,7 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 	
 	@Transactional
 	@Override
-	public List<CapsuleStock> get() {
+	public List<CapsuleStock> getCapsuleStockFull() {
 		Session currentSession = em.unwrap(Session.class);
 		Query<CapsuleStock> query = currentSession.createQuery("from capsuleStock", CapsuleStock.class);
 		List<CapsuleStock> capsuleList = query.getResultList();
@@ -32,10 +32,11 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void save(CapsuleStock capsuleStock) {
-		// TODO Auto-generated method stub
-		
+	public void saveCapsuleStock(CapsuleStock capsuleStock) {
+		Session currentSession = em.unwrap(Session.class);
+		currentSession.save(capsuleStock);
 	}
 
 	@Override
