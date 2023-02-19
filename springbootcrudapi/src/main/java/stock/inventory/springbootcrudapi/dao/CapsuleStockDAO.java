@@ -5,11 +5,11 @@ import stock.inventory.springbootcrudapi.model.CapsuleStock;
 
 public interface CapsuleStockDAO {
 	
-	List<CapsuleStock> get();
+	List<CapsuleStock> getCapsuleStockFull();
 	
 	CapsuleStock get(int tradeId);
 	
-	void save(CapsuleStock capsuleStock);
+	void saveCapsuleStock(CapsuleStock capsuleStock);
 	
 	void delete(int tradeId);
 	
