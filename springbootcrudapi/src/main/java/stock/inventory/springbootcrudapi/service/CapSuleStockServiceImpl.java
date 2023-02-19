@@ -9,18 +9,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
+
+import stock.inventory.springbootcrudapi.dao.CapsuleStockDAO;
+import stock.inventory.springbootcrudapi.dao.CapsuleStockDAOImpl;
 import stock.inventory.springbootcrudapi.model.CapsuleStock;
 
 @Service
 public class CapSuleStockServiceImpl implements CapsuleStockService{
 
 	@Autowired
-	private EntityManager em;
+	private CapsuleStockDAO capsuleStockDAO;
 	
 	@Transactional
 	@Override
 	public List<CapsuleStock> get() {
-		return null;
+		return capsuleStockDAO.get();
 	}
 
 	@Transactional

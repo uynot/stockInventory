@@ -15,6 +15,7 @@
 	<description>CSGO Investment Record Database</description>
 	<properties>
 		<java.version>17</java.version>
+		<start-class>stock.inventory.springbootcrudapi.SpringbootcrudapiApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
