@@ -9,7 +9,7 @@ public interface CapsuleStockService {
 	
 	CapsuleStock get(int tradeId);
 	
-	void saveCapsuleStock(CapsuleStock capsuleStock);
+	String saveCapsuleStock(CapsuleStock capsuleStock);
 	
 	void delete(int tradeId);
 	

@@ -36,8 +36,8 @@ public class CapSuleStockServiceImpl implements CapsuleStockService{
 
 	@Transactional
 	@Override
-	public void saveCapsuleStock(CapsuleStock capsuleStock) {
-		capsuleStockDAO.saveCapsuleStock(capsuleStock);
+	public String saveCapsuleStock(CapsuleStock capsuleStock) {
+		return capsuleStockDAO.saveCapsuleStock(capsuleStock);
 	}
 
 	@Transactional

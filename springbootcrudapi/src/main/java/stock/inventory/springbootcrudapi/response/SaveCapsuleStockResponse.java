@@ -3,6 +3,7 @@ package stock.inventory.springbootcrudapi.response;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import stock.inventory.springbootcrudapi.model.CapsuleStock;
 
 //@data
 public class SaveCapsuleStockResponse {
@@ -20,7 +22,7 @@ public class SaveCapsuleStockResponse {
 	private String status;
 	private String error;
 	private String msg;
-    private ArrayList<?> data;
+    private CapsuleStock data;
     
 	public String getCode() {
 		return code;
@@ -50,10 +52,10 @@ public class SaveCapsuleStockResponse {
 		this.msg = msg;
 	}
 	
-	public ArrayList<?> getData() {
+	public CapsuleStock getData() {
 		return data;
 	}
-	public void setData(ArrayList<?> data) {
+	public void setData(CapsuleStock data) {
 		this.data = data;
 	}
 }
