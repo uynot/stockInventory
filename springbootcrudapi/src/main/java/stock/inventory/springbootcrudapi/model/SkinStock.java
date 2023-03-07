@@ -1,6 +1,8 @@
 package stock.inventory.springbootcrudapi.model;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -45,7 +47,8 @@ public class SkinStock {
 	private float cashoutPrice;
 	
 	@Column(name="trade_time")
-	private LocalDateTime tradeTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date tradeTime;
 	
 	@Column(name="buff_url")
 	private String buffUrl;
@@ -122,11 +125,11 @@ public class SkinStock {
 		this.cashoutPrice = cashoutPrice;
 	}
 
-	public LocalDateTime getTradeTime() {
+	public Date getTradeTime() {
 		return tradeTime;
 	}
 
-	public void setTradeTime(LocalDateTime tradeTime) {
+	public void setTradeTime(Date tradeTime) {
 		this.tradeTime = tradeTime;
 	}
 

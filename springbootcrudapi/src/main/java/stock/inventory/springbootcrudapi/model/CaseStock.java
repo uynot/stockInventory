@@ -1,6 +1,8 @@
 package stock.inventory.springbootcrudapi.model;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -24,13 +26,13 @@ public class CaseStock {
 	private String itemOwner;
 	
 	@Column(name="item_id")
-	private int itemId;
+	private Integer itemId;
 	
 	@Column(name="trade_action") //buy or sell
 	private String tradeAction;
 	
 	@Column(name="quantity")
-	private int quantity;
+	private Integer quantity;
 	
 	@Column(name="buy_in_price")
 	private float buyinPrice;
@@ -39,7 +41,8 @@ public class CaseStock {
 	private float cashoutPrice;
 	
 	@Column(name="trade_time")
-	private LocalDateTime tradeTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date tradeTime;
 	
 	@Column(name="buff_url")
 	private String buffUrl;
@@ -60,11 +63,11 @@ public class CaseStock {
 		this.itemOwner = itemOwner;
 	}
 
-	public int getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(int itemId) {
+	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 
@@ -76,11 +79,11 @@ public class CaseStock {
 		this.tradeAction = tradeAction;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -100,11 +103,11 @@ public class CaseStock {
 		this.cashoutPrice = cashoutPrice;
 	}
 
-	public LocalDateTime getTradeTime() {
+	public Date getTradeTime() {
 		return tradeTime;
 	}
 
-	public void setTradeTime(LocalDateTime tradeTime) {
+	public void setTradeTime(Date tradeTime) {
 		this.tradeTime = tradeTime;
 	}
 
