@@ -34,9 +34,19 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void saveCapsuleStock(CapsuleStock capsuleStock) {
+	public String saveCapsuleStock(CapsuleStock capsuleStock) {
+		String result = "";
+		
 		Session currentSession = em.unwrap(Session.class);
-		currentSession.save(capsuleStock);
+		
+		try {
+			currentSession.save(capsuleStock);
+			result = "Success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "Failed";
+		}
+		return result;
 	}
 
 	@Override

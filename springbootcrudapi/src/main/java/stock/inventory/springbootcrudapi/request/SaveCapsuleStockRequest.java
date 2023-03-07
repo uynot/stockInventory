@@ -1,6 +1,7 @@
 package stock.inventory.springbootcrudapi.request;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,12 @@ import jakarta.persistence.Table;
 public class SaveCapsuleStockRequest {
 	
 	private String itemOwner;
-	private int itemId;
+	private Integer itemId;
 	private String tradeAction;
-	private int quantity;
+	private Integer quantity;
 	private float buyInPrice;
 	private float cashoutPrice;
-	private LocalDateTime tradeTime;
+	private String tradeTime;
 	private String buffUrl;
 	public String getItemOwner() {
 		
@@ -28,10 +29,10 @@ public class SaveCapsuleStockRequest {
 	public void setItemOwner(String itemOwner) {
 		this.itemOwner = itemOwner;
 	}
-	public int getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
-	public void setItemId(int itemId) {
+	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 	public String getTradeAction() {
@@ -40,10 +41,10 @@ public class SaveCapsuleStockRequest {
 	public void setTradeAction(String tradeAction) {
 		this.tradeAction = tradeAction;
 	}
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 	public float getBuyInPrice() {
@@ -58,10 +59,10 @@ public class SaveCapsuleStockRequest {
 	public void setCashoutPrice(float cashoutPrice) {
 		this.cashoutPrice = cashoutPrice;
 	}
-	public LocalDateTime getTradeTime() {
+	public String getTradeTime() {
 		return tradeTime;
 	}
-	public void setTradeTime(LocalDateTime tradeTime) {
+	public void setTradeTime(String tradeTime) {
 		this.tradeTime = tradeTime;
 	}
 	public String getBuffUrl() {
