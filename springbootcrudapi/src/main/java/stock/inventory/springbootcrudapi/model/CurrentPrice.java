@@ -1,6 +1,8 @@
 package stock.inventory.springbootcrudapi.model;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,10 @@ public class CurrentPrice {
 	@Column(name="current_price")
 	private String currentPrice;
 
+	@Column(name="lastUpdateTime")
+	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDateTime lastUpdateTime;
+	
 	public int getItemId() {
 		return itemId;
 	}
