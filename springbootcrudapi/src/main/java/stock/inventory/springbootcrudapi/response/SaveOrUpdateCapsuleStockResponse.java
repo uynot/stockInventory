@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 import stock.inventory.springbootcrudapi.model.CapsuleStock;
 
 //@data
-public class SaveCapsuleStockResponse {
+public class SaveOrUpdateCapsuleStockResponse {
 	
 	private String code;
 	private String status;

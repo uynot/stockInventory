@@ -7,9 +7,9 @@ public interface CapsuleStockService {
 	
 	List<CapsuleStock> getCapsuleStockFull();
 	
-	CapsuleStock get(int tradeId);
+	//CapsuleStock get(int tradeId); 	//get 1 record only
 	
-	String saveCapsuleStock(CapsuleStock capsuleStock);
+	String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock);
 	
 	void delete(int tradeId);
 	
