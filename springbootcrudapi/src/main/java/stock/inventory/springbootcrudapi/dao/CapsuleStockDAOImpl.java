@@ -26,21 +26,21 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 		return capsuleList;
 	}
 
-	@Override
-	public CapsuleStock get(int tradeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	get 1 record only
+//		@Override
+//		public CapsuleStock get(int tradeId) {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public String saveCapsuleStock(CapsuleStock capsuleStock) {
+	public String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock) {
 		String result = "";
-		
 		Session currentSession = em.unwrap(Session.class);
 		
 		try {
-			currentSession.save(capsuleStock);
+			currentSession.saveOrUpdate(capsuleStock);
 			result = "Success";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,5 +54,4 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
