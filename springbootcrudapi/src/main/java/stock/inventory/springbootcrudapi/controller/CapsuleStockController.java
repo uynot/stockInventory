@@ -37,13 +37,23 @@ public class CapsuleStockController {
 	
 	@PostMapping("/save_capsule_stock")
 	public SaveCapsuleStockResponse saveCapsuleStock(@RequestBody SaveCapsuleStockRequest saveCapsuleStockRequest) throws Exception {
+		//response {
+		//			"itemOwner": "stella",
+		//			"itemId": 123,
+		//			"tradeAction": "Buy",
+		//			"quantity": 123,
+		//			"buyinPrice": 1.0,
+		//			"cashoutPrice": 1.0,
+		//			"tradeTime": "2022-02-20T00:00:00",
+		//			"buffUrl": "1"
+		//			}
+		
 		CapsuleStock capsuleStock = new CapsuleStock(); //empty entity
 		SaveCapsuleStockResponse response = new SaveCapsuleStockResponse(); //response api format
 		//List<CapsuleStock> data = new ArrayList<>();//saved data array list if data contain multiple array
 		Float buyInPrice = saveCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = saveCapsuleStockRequest.getCashoutPrice();
 		
-		//this incomplete
 		//LocalDateTime tradeTime = saveCapsuleStockRequest.getTradeTime();
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date currentDate = new Date();
@@ -82,6 +92,8 @@ public class CapsuleStockController {
 				} else {
 					if(capsuleStock.getTradeAction().isEmpty()) {
 						response.setMsg("Trade Action is missing");
+					} else if(!capsuleStock.getTradeAction().toLowerCase().equals("buy") && !capsuleStock.getTradeAction().toLowerCase().equals("sell")) {
+						response.setMsg("Incorrect Trade Action");
 					} else {
 						if(capsuleStock.getQuantity() == null) {
 							response.setMsg("Quantity is missing");
@@ -103,20 +115,7 @@ public class CapsuleStockController {
 			response.setMsg("Error occupied when saving capsule trade record.");
 			response.setData(null);
 		}
-		
 		return response;
-		
-		//response
-		//	{
-		//		"itemOwner": "stella",
-		//		"itemId": 123,
-		//		"tradeAction": "Buy",
-		//		"quantity": 123,
-		//		"buyinPrice": 1.0,
-		//		"cashoutPrice": 1.0,
-		//		"tradeTime": "2022-02-20T00:00:00",
-		//		"buffUrl": "1"
-		//	}
 	}
 	
 	
