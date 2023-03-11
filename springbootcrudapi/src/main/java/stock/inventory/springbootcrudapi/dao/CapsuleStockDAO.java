@@ -7,10 +7,10 @@ public interface CapsuleStockDAO {
 	
 	List<CapsuleStock> getCapsuleStockFull();
 	
-	//CapsuleStock get(int tradeId); 	//get 1 record only
+	CapsuleStock getCapsuleStockSingle(int tradeId);
 	
 	String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock);
 	
-	void delete(int tradeId);
+	String deleteCapsuleStock(int tradeId);
 	
 }

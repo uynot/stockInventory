@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import stock.inventory.springbootcrudapi.model.CapsuleStock;
 import stock.inventory.springbootcrudapi.request.SaveCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
-import stock.inventory.springbootcrudapi.response.SaveOrUpdateCapsuleStockResponse;
+import stock.inventory.springbootcrudapi.response.CapsuleStockResponse;
 import stock.inventory.springbootcrudapi.service.CapsuleStockService;
 
 @RestController
@@ -32,26 +34,65 @@ public class CapsuleStockController {
 	@Autowired
 	private CapsuleStockService capsuleStockService;
 	
-	@GetMapping("/capsule/get_all_capsule_stock")
+	@GetMapping("/capsule/getCapsuleStockFull")
 	public List<CapsuleStock> getCapsuleStockFull() {
+		
+		// CHANGE TO response format
+		
 		return capsuleStockService.getCapsuleStockFull();
 	}
 	
+	@GetMapping("/capsule/getCapsuleStockSingle/{tradeId}")
+	public CapsuleStockResponse getCapsuleStockSingle(@PathVariable Integer tradeId) throws Exception {
+		//require	{
+		//				"23"
+		//			}
+		CapsuleStockResponse response = new CapsuleStockResponse();
+		CapsuleStock capsuleStock = new CapsuleStock();
+		String getSuccessOrFail = "Failed";
+		
+		response.setCode("GET-CAPSULE-FAIL");
+		response.setStatus(getSuccessOrFail);
+		response.setMsg("");
+		response.setError(null);
+		response.setData(null);
+		
+		try {
+			capsuleStock = capsuleStockService.getCapsuleStockSingle(tradeId);
+			if(capsuleStock == null) {
+				response.setMsg("Record not found");
+				throw new RuntimeException("Record not found");
+			} else {
+				getSuccessOrFail = "Success";
+				response.setMsg("Get capsule trade record successfully");
+				response.setCode("GET-CAPSULE-SUCCESS");
+				response.setStatus("Success");
+				response.setData(capsuleStock);
+			}
+		} catch(Exception e) {
+			response.setError(e.getMessage());
+			response.setCode("GET-CAPSULE-ERROR");
+			response.setMsg("Error occupied when getting capsule trade record.");
+		}
+		
+		return response;
+	}
+	
 	@PostMapping("/capsule/create_capsule_stock")
-	public SaveOrUpdateCapsuleStockResponse createCapsuleStock(@RequestBody SaveCapsuleStockRequest saveCapsuleStockRequest) throws Exception {
-		//response {
-		//			"itemOwner": "stella",
-		//			"itemId": 123,
-		//			"tradeAction": "Buy",
-		//			"quantity": 123,
-		//			"buyinPrice": 1.0,
-		//			"cashoutPrice": 1.0,
-		//			"tradeTime": "2022-02-20T00:00:00",
-		//			"buffUrl": "1"
+	public CapsuleStockResponse createCapsuleStock(@RequestBody SaveCapsuleStockRequest saveCapsuleStockRequest) throws Exception {
+		//require	{
+		//				"itemOwner": "stella",
+		//				"itemId": 123,
+		//				"tradeAction": "Buy",
+		//				"quantity": 123,
+		//				"buyinPrice": 1.0,
+		//				"cashoutPrice": 1.0,
+		//				"tradeTime": "2022-02-20T00:00:00",
+		//				"buffUrl": "1"
 		//			}
 		
 		CapsuleStock capsuleStock = new CapsuleStock(); //empty entity
-		SaveOrUpdateCapsuleStockResponse response = new SaveOrUpdateCapsuleStockResponse(); //response api format
+		CapsuleStockResponse response = new CapsuleStockResponse(); //response api format
 		//List<CapsuleStock> data = new ArrayList<>();//saved data array list if data contain multiple array
 		Float buyInPrice = saveCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = saveCapsuleStockRequest.getCashoutPrice();
@@ -87,48 +128,46 @@ public class CapsuleStockController {
 		
 		try {
 			if(capsuleStock.getItemOwner().isEmpty()) {
-				response.setMsg("Item Owner is missing");
+				response.setMsg("Invalid Item Owner");
 			} else if(capsuleStock.getItemId() == null) {
-				response.setMsg("Item Name is missing");
+				response.setMsg("Invalid Item Name");
 			} else if(capsuleStock.getTradeAction().isEmpty()) {
-				response.setMsg("Trade Action is missing");
-			} else if(!capsuleStock.getTradeAction().toLowerCase().equals("buy") && !capsuleStock.getTradeAction().toLowerCase().equals("sell")) {
-				response.setMsg("Incorrect Trade Action");
+				response.setMsg("Invalid Trade Action");
+			} else if(capsuleStock.getTradeAction().isEmpty() || 
+					(!capsuleStock.getTradeAction().toLowerCase().equals("buy") && !capsuleStock.getTradeAction().toLowerCase().equals("sell"))) {
+				response.setMsg("Invalid Incorrect");
 			} else if(capsuleStock.getQuantity() == null) {
-				response.setMsg("Quantity is missing");
+				response.setMsg("Invalid Quantity");
 			} else {
 				saveSuccessOrFail = capsuleStockService.saveOrUpdateCapsuleStock(capsuleStock);
 				response.setCode("SAVE-CAPSULE-SUCCESS");
 				response.setStatus(saveSuccessOrFail);
-				response.setError(null);
 				response.setMsg("Saved capsule trade record successfully");
 				response.setData(capsuleStock);
 			}
 		} catch (Exception e) {
 			response.setError(e.getMessage());
-			response.setStatus(saveSuccessOrFail);
 			response.setCode("SAVE-CAPSULE-ERROR");
 			response.setMsg("Error occupied when saving capsule trade record.");
-			response.setData(null);
 		}
 		return response;
 	}
 	
 	@PutMapping("/capsule/update_capsule_stock")
-	public SaveOrUpdateCapsuleStockResponse updateCapsuleStock(@RequestBody UpdateCapsuleStockRequest updateCapsuleStockRequest) throws Exception {
-		//response {
-		//			"tradeId": "1",
-		//			"itemOwner": "stella",
-		//			"itemId": 123,
-		//			"tradeAction": "Buy",
-		//			"quantity": 123,
-		//			"buyinPrice": 1.0,
-		//			"cashoutPrice": 1.0,
-		//			"tradeTime": "2022-02-20T00:00:00",
-		//			"buffUrl": "1"
+	public CapsuleStockResponse updateCapsuleStock(@RequestBody UpdateCapsuleStockRequest updateCapsuleStockRequest) throws Exception {
+		//require	{
+		//				"tradeId": "1",
+		//				"itemOwner": "stella",
+		//				"itemId": 123,
+		//				"tradeAction": "Buy",
+		//				"quantity": 123,
+		//				"buyinPrice": 1.0,
+		//				"cashoutPrice": 1.0,
+		//				"tradeTime": "2022-02-20T00:00:00",
+		//				"buffUrl": "1"
 		//			}
 		CapsuleStock capsuleStock = new CapsuleStock();
-		SaveOrUpdateCapsuleStockResponse response = new SaveOrUpdateCapsuleStockResponse();
+		CapsuleStockResponse response = new CapsuleStockResponse();
 		Float buyInPrice = updateCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = updateCapsuleStockRequest.getCashoutPrice();
 		
@@ -163,34 +202,66 @@ public class CapsuleStockController {
 		
 		try {
 			if(capsuleStock.getTradeId() == null) {
-				response.setMsg("Trade ID is missing");
+				response.setMsg("Invalid Trade ID");
 			} else if(capsuleStock.getItemOwner().isEmpty()) {
-				response.setMsg("Item Owner is missing");
+				response.setMsg("Invalid Item Owner");
 			} else if(capsuleStock.getItemId() == null) {
-				response.setMsg("Item Name is missing");
-			} else if(capsuleStock.getTradeAction().isEmpty()) {
-				response.setMsg("Trade Action is missing");
-			} else if(!capsuleStock.getTradeAction().toLowerCase().equals("buy") && !capsuleStock.getTradeAction().toLowerCase().equals("sell")) {
-				response.setMsg("Incorrect Trade Action");
+				response.setMsg("Invalid Item Name");
+			} else if(capsuleStock.getTradeAction().isEmpty() || 
+					(!capsuleStock.getTradeAction().toLowerCase().equals("buy") && !capsuleStock.getTradeAction().toLowerCase().equals("sell"))) {
+				response.setMsg("Invalid Trade Action");
 			} else if(capsuleStock.getQuantity() == null) {
-				response.setMsg("Quantity is missing");
+				response.setMsg("Invalid Quantity");
 			} else {
 				updateSuccessOrFail = capsuleStockService.saveOrUpdateCapsuleStock(capsuleStock);
 				response.setCode("UPDATE-CAPSULE-SUCCESS");
 				response.setStatus(updateSuccessOrFail);
-				response.setError(null);
 				response.setMsg("Updated capsule trade record successfully");
 				response.setData(capsuleStock);
 			}
-		} catch (Exception e) {
+		} catch(Exception e) {
 			response.setError(e.getMessage());
-			response.setStatus(updateSuccessOrFail);
 			response.setCode("UPDATE-CAPSULE-ERROR");
 			response.setMsg("Error occupied when updating capsule trade record.");
-			response.setData(null);
 		}
 		return response;
 	}
-
-	//delete
+	
+	@DeleteMapping("/capsule/deletion/{tradeId}")
+	public CapsuleStockResponse deleteCapsuleStock(@PathVariable Integer tradeId) throws Exception {
+		//require	{
+		//				"23"
+		//			}
+		CapsuleStockResponse response = new CapsuleStockResponse();
+		CapsuleStock capsuleStock = new CapsuleStock();
+		String deleteSuccessOrFail = "Failed";
+		
+		response.setCode("DELETE-CAPSULE-FAIL");
+		response.setStatus(deleteSuccessOrFail);
+		response.setError(null);
+		response.setData(null);
+		
+		try {
+			if(tradeId == null || tradeId == 0) {
+				response.setMsg("Invalid Trade ID");
+			} else {
+				capsuleStock = capsuleStockService.getCapsuleStockSingle(tradeId);
+				if(capsuleStock == null) {
+					response.setMsg("Record not found");
+					throw new RuntimeException("Record not found");
+				} else {
+					deleteSuccessOrFail = capsuleStockService.deleteCapsuleStock(tradeId);
+					response.setMsg("Delete capsule trade record successfully");
+					response.setCode("DELETE-CAPSULE-SUCCESS");
+					response.setStatus(deleteSuccessOrFail);
+					response.setData(capsuleStock);
+				}
+			}
+		} catch(Exception e) {
+			response.setError(e.getMessage());
+			response.setCode("DELETE-CAPSULE-ERROR");
+			response.setMsg("Error occupied when deleting capsule trade record");
+		}
+		return response;
+	}
 }

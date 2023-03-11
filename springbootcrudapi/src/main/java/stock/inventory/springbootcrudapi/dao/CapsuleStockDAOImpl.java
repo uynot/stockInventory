@@ -23,15 +23,17 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 		Session currentSession = em.unwrap(Session.class);
 		Query<CapsuleStock> query = currentSession.createQuery("from capsuleStock", CapsuleStock.class);
 		List<CapsuleStock> capsuleList = query.getResultList();
+		
 		return capsuleList;
 	}
 
-//	get 1 record only
-//		@Override
-//		public CapsuleStock get(int tradeId) {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
+	@Override
+	public CapsuleStock getCapsuleStockSingle(int tradeId) {
+		Session currentSession = em.unwrap(Session.class);
+		CapsuleStock capsuleStock = currentSession.get(CapsuleStock.class, tradeId);
+		
+		return capsuleStock;
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -41,17 +43,29 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 		
 		try {
 			currentSession.saveOrUpdate(capsuleStock);
-			result = "Success";
+			result = "save or update success";
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = "Failed";
+			result = "save or update failed";
 		}
+		
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void delete(int tradeId) {
-		// TODO Auto-generated method stub
+	public String deleteCapsuleStock(int tradeId) {
+		String result = "";
+		Session currentSession = em.unwrap(Session.class);
+		CapsuleStock capsuleStock = currentSession.get(CapsuleStock.class, tradeId);
 		
+		try {
+			currentSession.delete(capsuleStock);
+		    result = "deletion success";
+		} catch (Exception e) {
+			result = "deletion failed";
+		}
+		
+		return result;
 	}
 }
