@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import stock.inventory.springbootcrudapi.model.CapsuleStock;
 import stock.inventory.springbootcrudapi.request.SaveCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
+import stock.inventory.springbootcrudapi.response.CapsuleStockGetResponse;
 import stock.inventory.springbootcrudapi.response.CapsuleStockResponse;
 import stock.inventory.springbootcrudapi.service.CapsuleStockService;
 
@@ -35,11 +36,35 @@ public class CapsuleStockController {
 	private CapsuleStockService capsuleStockService;
 	
 	@GetMapping("/capsule/getCapsuleStockFull")
-	public List<CapsuleStock> getCapsuleStockFull() {
+	public CapsuleStockGetResponse getCapsuleStockFull() { // CHANGE TO return response
+		CapsuleStockGetResponse response = new CapsuleStockGetResponse();
+		List<CapsuleStock> dataList = new ArrayList<CapsuleStock>();
 		
-		// CHANGE TO response format
+		response.setCode("GET-CAPSULE-FAIL");
+		response.setStatus("Failed");
+		response.setError(null);
+		response.setData(null);
 		
-		return capsuleStockService.getCapsuleStockFull();
+		try {
+			dataList = capsuleStockService.getCapsuleStockFull();
+			
+			if(dataList == null) {
+				response.setCode("GET-CAPSULE-SUCCESS");
+				response.setStatus("Success");
+				response.setMsg("Record not found");
+			} else {
+				response.setData(dataList);
+				response.setCode("GET-CAPSULE-SUCCESS");
+				response.setStatus("Success");
+				response.setMsg("Get capsule trade record successfully");
+			}
+		} catch(Exception e) {
+			response.setError(e.getMessage());
+			response.setCode("GET-CAPSULE-ERROR");
+			response.setMsg("Error occupied when getting capsule trade record.");
+		}
+		
+		return response;
 	}
 	
 	@GetMapping("/capsule/getCapsuleStockSingle/{tradeId}")
@@ -53,18 +78,19 @@ public class CapsuleStockController {
 		
 		response.setCode("GET-CAPSULE-FAIL");
 		response.setStatus(getSuccessOrFail);
-		response.setMsg("");
 		response.setError(null);
 		response.setData(null);
 		
 		try {
 			capsuleStock = capsuleStockService.getCapsuleStockSingle(tradeId);
+			
 			if(capsuleStock == null) {
+				response.setCode("GET-CAPSULE-SUCCESS");
 				response.setMsg("Record not found");
-				throw new RuntimeException("Record not found");
+				response.setStatus("Success");
+				//throw new RuntimeException("Record not found");
 			} else {
-				getSuccessOrFail = "Success";
-				response.setMsg("Get capsule trade record successfully");
+				response.setMsg("Get capsule trade record " + tradeId + " successfully");
 				response.setCode("GET-CAPSULE-SUCCESS");
 				response.setStatus("Success");
 				response.setData(capsuleStock);
@@ -72,7 +98,7 @@ public class CapsuleStockController {
 		} catch(Exception e) {
 			response.setError(e.getMessage());
 			response.setCode("GET-CAPSULE-ERROR");
-			response.setMsg("Error occupied when getting capsule trade record.");
+			response.setMsg("Error occupied when getting capsule trade record " + tradeId + ".");
 		}
 		
 		return response;
@@ -91,9 +117,8 @@ public class CapsuleStockController {
 		//				"buffUrl": "1"
 		//			}
 		
-		CapsuleStock capsuleStock = new CapsuleStock(); //empty entity
-		CapsuleStockResponse response = new CapsuleStockResponse(); //response api format
-		//List<CapsuleStock> data = new ArrayList<>();//saved data array list if data contain multiple array
+		CapsuleStock capsuleStock = new CapsuleStock();
+		CapsuleStockResponse response = new CapsuleStockResponse();
 		Float buyInPrice = saveCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = saveCapsuleStockRequest.getCashoutPrice();
 		
