@@ -67,7 +67,7 @@ public class CapsuleStockController {
 		return response;
 	}
 	
-	@GetMapping("/capsule/getCapsuleStockSingle/{tradeId}")
+	@GetMapping("/capsule/getCapsuleStock/{tradeId}")
 	public CapsuleStockResponse getCapsuleStockSingle(@PathVariable Integer tradeId) throws Exception {
 		//require	{
 		//				"23"
@@ -104,7 +104,7 @@ public class CapsuleStockController {
 		return response;
 	}
 	
-	@PostMapping("/capsule/create_capsule_stock")
+	@PostMapping("/capsule/createCapsuleStock")
 	public CapsuleStockResponse createCapsuleStock(@RequestBody SaveCapsuleStockRequest saveCapsuleStockRequest) throws Exception {
 		//require	{
 		//				"itemOwner": "stella",
@@ -178,7 +178,7 @@ public class CapsuleStockController {
 		return response;
 	}
 	
-	@PutMapping("/capsule/update_capsule_stock")
+	@PutMapping("/capsule/updateCapsuleStock")
 	public CapsuleStockResponse updateCapsuleStock(@RequestBody UpdateCapsuleStockRequest updateCapsuleStockRequest) throws Exception {
 		//require	{
 		//				"tradeId": "1",
@@ -252,7 +252,7 @@ public class CapsuleStockController {
 		return response;
 	}
 	
-	@DeleteMapping("/capsule/deletion/{tradeId}")
+	@DeleteMapping("/capsule/deleteCapsuleStock/{tradeId}")
 	public CapsuleStockResponse deleteCapsuleStock(@PathVariable Integer tradeId) throws Exception {
 		//require	{
 		//				"23"
