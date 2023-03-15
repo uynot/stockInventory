@@ -12,5 +12,7 @@ public interface CapsuleStockDAO {
 	String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock);
 	
 	String deleteCapsuleStock(int tradeId);
+
+	Object[] getCapsuleROIHybrid(int tradeId);
 	
 }

@@ -13,7 +13,7 @@ import org.hibernate.Session;
 import stock.inventory.springbootcrudapi.dao.CapsuleStockDAO;
 import stock.inventory.springbootcrudapi.dao.CapsuleStockDAOImpl;
 import stock.inventory.springbootcrudapi.model.CapsuleStock;
-import stock.inventory.springbootcrudapi.response.CapsuleStockResponse;
+import stock.inventory.springbootcrudapi.response.CapsuleStockStandardResponse;
 
 @Service
 public class CapSuleStockServiceImpl implements CapsuleStockService{
@@ -45,4 +45,9 @@ public class CapSuleStockServiceImpl implements CapsuleStockService{
 		return capsuleStockDAO.deleteCapsuleStock(tradeId);
 	}
 
+	@Transactional
+	@Override
+	public Object[] getCapsuleROIHybrid(int tradeId) {
+		return capsuleStockDAO.getCapsuleROIHybrid(tradeId);
+	}
 }

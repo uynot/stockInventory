@@ -1,5 +1,7 @@
 package stock.inventory.springbootcrudapi.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,8 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,10 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import stock.inventory.springbootcrudapi.model.CapsuleStock;
+import stock.inventory.springbootcrudapi.request.CapsuleROIRequest;
 import stock.inventory.springbootcrudapi.request.SaveCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.response.CapsuleStockGetResponse;
-import stock.inventory.springbootcrudapi.response.CapsuleStockResponse;
+import stock.inventory.springbootcrudapi.response.CapsuleStockROIResponse;
+import stock.inventory.springbootcrudapi.response.CapsuleStockStandardResponse;
 import stock.inventory.springbootcrudapi.service.CapsuleStockService;
 
 @RestController
@@ -35,8 +41,10 @@ public class CapsuleStockController {
 	@Autowired
 	private CapsuleStockService capsuleStockService;
 	
+	//Full Single Hybrid
+	
 	@GetMapping("/capsule/getCapsuleStockFull")
-	public CapsuleStockGetResponse getCapsuleStockFull() { // CHANGE TO return response
+	public CapsuleStockGetResponse getCapsuleStockFull() {
 		CapsuleStockGetResponse response = new CapsuleStockGetResponse();
 		List<CapsuleStock> dataList = new ArrayList<CapsuleStock>();
 		
@@ -68,11 +76,11 @@ public class CapsuleStockController {
 	}
 	
 	@GetMapping("/capsule/getCapsuleStock/{tradeId}")
-	public CapsuleStockResponse getCapsuleStockSingle(@PathVariable Integer tradeId) throws Exception {
+	public CapsuleStockStandardResponse getCapsuleStockSingle(@PathVariable Integer tradeId) throws Exception {
 		//require	{
 		//				"23"
 		//			}
-		CapsuleStockResponse response = new CapsuleStockResponse();
+		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
 		CapsuleStock capsuleStock = new CapsuleStock();
 		String getSuccessOrFail = "Failed";
 		
@@ -105,7 +113,7 @@ public class CapsuleStockController {
 	}
 	
 	@PostMapping("/capsule/createCapsuleStock")
-	public CapsuleStockResponse createCapsuleStock(@RequestBody SaveCapsuleStockRequest saveCapsuleStockRequest) throws Exception {
+	public CapsuleStockStandardResponse createCapsuleStock(@RequestBody SaveCapsuleStockRequest saveCapsuleStockRequest) throws Exception {
 		//require	{
 		//				"itemOwner": "stella",
 		//				"itemId": 123,
@@ -118,11 +126,10 @@ public class CapsuleStockController {
 		//			}
 		
 		CapsuleStock capsuleStock = new CapsuleStock();
-		CapsuleStockResponse response = new CapsuleStockResponse();
+		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
 		Float buyInPrice = saveCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = saveCapsuleStockRequest.getCashoutPrice();
 		
-		//LocalDateTime tradeTime = saveCapsuleStockRequest.getTradeTime();
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date currentDate = new Date();
 		String saveSuccessOrFail = "Failed";
@@ -179,7 +186,7 @@ public class CapsuleStockController {
 	}
 	
 	@PutMapping("/capsule/updateCapsuleStock")
-	public CapsuleStockResponse updateCapsuleStock(@RequestBody UpdateCapsuleStockRequest updateCapsuleStockRequest) throws Exception {
+	public CapsuleStockStandardResponse updateCapsuleStock(@RequestBody UpdateCapsuleStockRequest updateCapsuleStockRequest) throws Exception {
 		//require	{
 		//				"tradeId": "1",
 		//				"itemOwner": "stella",
@@ -192,7 +199,7 @@ public class CapsuleStockController {
 		//				"buffUrl": "1"
 		//			}
 		CapsuleStock capsuleStock = new CapsuleStock();
-		CapsuleStockResponse response = new CapsuleStockResponse();
+		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
 		Float buyInPrice = updateCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = updateCapsuleStockRequest.getCashoutPrice();
 		
@@ -253,11 +260,11 @@ public class CapsuleStockController {
 	}
 	
 	@DeleteMapping("/capsule/deleteCapsuleStock/{tradeId}")
-	public CapsuleStockResponse deleteCapsuleStock(@PathVariable Integer tradeId) throws Exception {
+	public CapsuleStockStandardResponse deleteCapsuleStock(@PathVariable Integer tradeId) throws Exception {
 		//require	{
 		//				"23"
 		//			}
-		CapsuleStockResponse response = new CapsuleStockResponse();
+		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
 		CapsuleStock capsuleStock = new CapsuleStock();
 		String deleteSuccessOrFail = "Failed";
 		
@@ -289,4 +296,107 @@ public class CapsuleStockController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/capsule/capsuleROIHybrid")
+	public CapsuleStockROIResponse createItems(@RequestBody List<CapsuleROIRequest> capsuleROIRequests) throws Exception {
+		//require	[
+		//				{
+		//        			"tradeId": 21
+		//    			},
+		//   			{
+		//       			"tradeId": 22
+		//    			}
+		//			]
+		CapsuleStockROIResponse response = new CapsuleStockROIResponse();
+		List<String> items = new ArrayList<String>();
+		String deleteSuccessOrFail = "Failed";
+		int totalQuantity = 0;
+		double totalBuyInPrice = 0;
+		double totalCurrentPrice = 0;
+		double totalProfit = 0;
+		double averageProfit = 0;
+		double averageROI = 0;
+		
+		response.setCode("ROI-CAPSULE-FAIL");
+		response.setStatus(deleteSuccessOrFail);
+		response.setError(null);
+		response.setMsg("Record not found");
+		response.setItems(null);
+		response.setQuantity(0);
+		response.setTotalBuyInPrice(0);
+		response.setTotalCurrentPrice(0);
+		response.setProfit(0);
+		response.setAverageProfit(0);
+		response.setAverageROI("0%");
+		
+		try {
+			for (CapsuleROIRequest capsuleROIRequest : capsuleROIRequests) {
+			    int tradeId = capsuleROIRequest.getTradeId();
+			    Object[] roiDataArray = capsuleStockService.getCapsuleROIHybrid(tradeId);
+
+			    if (roiDataArray != null) {
+			        Double quantity = Double.parseDouble(String.valueOf(roiDataArray[1]).trim());
+			        Double buyInPrice = Double.parseDouble(String.valueOf(roiDataArray[2]).trim());
+			        Double soldPrice = 0d;
+			        Double currentPrice = 0d;
+
+			        if ((roiDataArray[3]) != null) {
+			        	soldPrice = Double.parseDouble(String.valueOf(roiDataArray[3]).trim());
+			        }
+			        if ((roiDataArray[4]) != null) {
+			        	currentPrice = Double.parseDouble(String.valueOf(roiDataArray[4]).trim());
+			        }
+			        if (soldPrice > 0 || currentPrice > 0) {
+			        	items.add(String.valueOf(roiDataArray[0]).trim());
+			            totalQuantity += quantity;
+			            totalBuyInPrice += buyInPrice;
+
+			            if (soldPrice > 0) {
+			                totalCurrentPrice += soldPrice;
+			                totalProfit += (soldPrice - buyInPrice);
+			                averageROI += ((soldPrice / buyInPrice) * 100);
+			            } else {
+			                totalCurrentPrice += currentPrice;
+			                totalProfit += (currentPrice - buyInPrice);
+			                averageROI += ((currentPrice / buyInPrice) * 100);
+			            }
+			        }
+			    }
+			}
+			if (totalQuantity > 0) {
+				
+				averageProfit = totalProfit / totalQuantity;
+				averageROI = roundUpToDecimal2((averageROI / totalQuantity));
+
+				Set<String> itemsSet = new HashSet<>(items);
+				List<String> uniqueItemsList = new ArrayList<>(itemsSet);
+				
+				response.setCode("ROI-CAPSULE-SUCCESS");
+				response.setStatus("Success");
+				response.setMsg("Get capsule ROI successfully");
+				response.setItems(uniqueItemsList);
+				response.setQuantity(totalQuantity);
+				response.setTotalBuyInPrice(roundUpToDecimal2(totalBuyInPrice));
+				response.setTotalCurrentPrice(roundUpToDecimal2(totalCurrentPrice));
+				response.setProfit(roundUpToDecimal2(totalProfit));
+				response.setAverageProfit(roundUpToDecimal2(averageProfit));
+				response.setAverageROI(Double.toString(roundUpToDecimal2(averageROI)) + "%");
+			}
+		} catch(Exception e) {
+			response.setCode("ROI-CAPSULE-ERROR");
+			response.setError(e.getMessage());
+			response.setMsg("Error occupied when getting capsule ROI record");
+		}
+	    return response;
+	}
+
+	private double roundUpToDecimal2(double value) {
+		BigDecimal bd = new BigDecimal(Double.toString(value));
+		bd = bd.setScale(2, RoundingMode.HALF_UP);
+		double roundedValue = bd.floatValue();
+
+		return roundedValue;
+	}
+
+	//List<Map<String,String>> top3ROI = new ArrayList<>();
 }

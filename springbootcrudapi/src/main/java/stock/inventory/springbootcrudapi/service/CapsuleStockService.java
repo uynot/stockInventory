@@ -13,4 +13,5 @@ public interface CapsuleStockService {
 	
 	String deleteCapsuleStock(int tradeId);
 	
+	Object[] getCapsuleROIHybrid(int tradeId);
 }
