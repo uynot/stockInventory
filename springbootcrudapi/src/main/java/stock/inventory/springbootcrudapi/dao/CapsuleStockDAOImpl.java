@@ -1,8 +1,10 @@
 package stock.inventory.springbootcrudapi.dao;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +69,33 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 		}
 		
 		return result;
+	}
+
+	@SuppressWarnings({ "deprecation", "rawtypes", "unchecked" })
+	@Override
+	public Object[] getCapsuleROIHybrid(int tradeId) {
+		Session session = em.unwrap(Session.class);
+
+		String sql = "SELECT "
+					+ "	`name`.item_name, "
+				   + "	capsule.quantity, capsule.buy_in_price, capsule.cashout_price, "
+			       + "	currentPrice.current_price "
+			       + "FROM tb_capsule_stock capsule "
+			       + "LEFT JOIN tb_current_price currentPrice ON currentPrice.item_id = capsule.item_id "
+			       + "JOIN tb_item_name `name` ON `name`.item_id = capsule.item_id "
+			       + "WHERE capsule.trade_id = :tradeId";
+
+		Query query = session.createNativeQuery(sql);
+		query.setParameter("tradeId", tradeId);
+		
+		Object[] rowValues = null;
+	    List<Object[]> results = query.list();
+	    if(!results.isEmpty()) {
+	        Object[] row = results.get(0);
+	        List<Object> rowList = Arrays.asList(row);
+	        rowValues = rowList.toArray(new Object[rowList.size()]);
+	    }
+
+	    return rowValues;
 	}
 }
