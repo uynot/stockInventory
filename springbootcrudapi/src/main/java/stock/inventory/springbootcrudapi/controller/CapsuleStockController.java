@@ -298,7 +298,7 @@ public class CapsuleStockController {
 	}
 	
 	@GetMapping("/capsule/capsuleROIHybrid")
-	public CapsuleStockROIResponse capsuleROIHybrid(@RequestBody List<CapsuleROIRequest> capsuleROIRequests) throws Exception {
+	public CapsuleStockROIResponse getCapsuleROIHybrid(@RequestBody List<CapsuleROIRequest> capsuleROIRequests) throws Exception {
 		//require	[
 		//				{
 		//        			"tradeId": 21
