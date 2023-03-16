@@ -29,6 +29,8 @@ public class CapsuleStockROIResponse {
     private double totalCurrentPrice;
     private double averageProfit;
     private String averageROI;
+    private int recordInput;
+    private int recordFound;
     
 	public String getCode() {
 		return code;
@@ -96,4 +98,17 @@ public class CapsuleStockROIResponse {
 	public void setTotalCurrentPrice(double totalCurrentPrice) {
 		this.totalCurrentPrice = totalCurrentPrice;
 	}
+	public int getRecordInput() {
+		return recordInput;
+	}
+	public void setRecordInput(int recordInput) {
+		this.recordInput = recordInput;
+	}
+	public int getRecordFound() {
+		return recordFound;
+	}
+	public void setRecordFound(int recordFound) {
+		this.recordFound = recordFound;
+	}
+	
 }
