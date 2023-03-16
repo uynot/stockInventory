@@ -298,7 +298,7 @@ public class CapsuleStockController {
 	}
 	
 	@GetMapping("/capsule/capsuleROIHybrid")
-	public CapsuleStockROIResponse createItems(@RequestBody List<CapsuleROIRequest> capsuleROIRequests) throws Exception {
+	public CapsuleStockROIResponse getCapsuleROIHybrid(@RequestBody List<CapsuleROIRequest> capsuleROIRequests) throws Exception {
 		//require	[
 		//				{
 		//        			"tradeId": 21
@@ -309,26 +309,24 @@ public class CapsuleStockController {
 		//			]
 		CapsuleStockROIResponse response = new CapsuleStockROIResponse();
 		List<String> items = new ArrayList<String>();
-		String deleteSuccessOrFail = "Failed";
 		int totalQuantity = 0;
 		double totalBuyInPrice = 0;
 		double totalCurrentPrice = 0;
 		double totalProfit = 0;
-		double averageProfit = 0;
-		double averageROI = 0;
+		int recordFound = 0;
 		
 		response.setCode("ROI-CAPSULE-FAIL");
-		response.setStatus(deleteSuccessOrFail);
-		response.setError(null);
+		response.setStatus("Failed");
 		response.setMsg("Record not found");
-		response.setItems(null);
-		response.setQuantity(0);
-		response.setTotalBuyInPrice(0);
-		response.setTotalCurrentPrice(0);
-		response.setProfit(0);
-		response.setAverageProfit(0);
 		response.setAverageROI("0%");
+		response.setRecordInput(capsuleROIRequests.size());
 		
+		if (capsuleROIRequests.isEmpty()) {
+			response.setError("No trade record provided");
+			response.setMsg("Please input trade records");
+			return response;
+		}
+		  
 		try {
 			for (CapsuleROIRequest capsuleROIRequest : capsuleROIRequests) {
 			    int tradeId = capsuleROIRequest.getTradeId();
@@ -347,40 +345,37 @@ public class CapsuleStockController {
 			        	currentPrice = Double.parseDouble(String.valueOf(roiDataArray[4]).trim());
 			        }
 			        if (soldPrice > 0 || currentPrice > 0) {
-			        	items.add(String.valueOf(roiDataArray[0]).trim());
-			            totalQuantity += quantity;
-			            totalBuyInPrice += buyInPrice;
+		                items.add(String.valueOf(roiDataArray[0]).trim());
+		                totalQuantity += quantity;
+		                totalBuyInPrice += buyInPrice;
+		                recordFound++;
 
-			            if (soldPrice > 0) {
-			                totalCurrentPrice += soldPrice;
-			                totalProfit += (soldPrice - buyInPrice);
-			                averageROI += ((soldPrice / buyInPrice) * 100);
-			            } else {
-			                totalCurrentPrice += currentPrice;
-			                totalProfit += (currentPrice - buyInPrice);
-			                averageROI += ((currentPrice / buyInPrice) * 100);
-			            }
-			        }
+		                if (soldPrice > 0) {
+		                    totalCurrentPrice += soldPrice;
+		                    totalProfit += (soldPrice - buyInPrice);
+		                } else {
+		                    totalCurrentPrice += currentPrice;
+		                    totalProfit += (currentPrice - buyInPrice);
+		                }
+		            }
 			    }
 			}
-			if (totalQuantity > 0) {
+			if (recordFound > 0) {
 				
-				averageProfit = totalProfit / totalQuantity;
-				averageROI = roundUpToDecimal2((averageROI / totalQuantity));
+				double averageProfit = totalProfit / totalQuantity;
+				double averageROI = roundUpToDecimal2((totalCurrentPrice / totalBuyInPrice - 1) * 100);
 
-				Set<String> itemsSet = new HashSet<>(items);
-				List<String> uniqueItemsList = new ArrayList<>(itemsSet);
-				
 				response.setCode("ROI-CAPSULE-SUCCESS");
 				response.setStatus("Success");
 				response.setMsg("Get capsule ROI successfully");
-				response.setItems(uniqueItemsList);
+				response.setItems(new ArrayList<>(new HashSet<>(items)));
 				response.setQuantity(totalQuantity);
 				response.setTotalBuyInPrice(roundUpToDecimal2(totalBuyInPrice));
 				response.setTotalCurrentPrice(roundUpToDecimal2(totalCurrentPrice));
 				response.setProfit(roundUpToDecimal2(totalProfit));
 				response.setAverageProfit(roundUpToDecimal2(averageProfit));
 				response.setAverageROI(Double.toString(roundUpToDecimal2(averageROI)) + "%");
+				response.setRecordFound(recordFound);
 			}
 		} catch(Exception e) {
 			response.setCode("ROI-CAPSULE-ERROR");
@@ -391,12 +386,8 @@ public class CapsuleStockController {
 	}
 
 	private double roundUpToDecimal2(double value) {
-		BigDecimal bd = new BigDecimal(Double.toString(value));
-		bd = bd.setScale(2, RoundingMode.HALF_UP);
-		double roundedValue = bd.floatValue();
-
-		return roundedValue;
+	    return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
-
+	
 	//List<Map<String,String>> top3ROI = new ArrayList<>();
 }
