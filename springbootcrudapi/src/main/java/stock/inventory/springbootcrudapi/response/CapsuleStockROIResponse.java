@@ -22,7 +22,7 @@ public class CapsuleStockROIResponse {
 	private String status;
 	private String error;
 	private String msg;
-    private List<String> items;
+    private List<Map<String, Integer>> items;
 	private int quantity;
 	private double profit;
 	private double totalBuyInPrice;
@@ -56,10 +56,10 @@ public class CapsuleStockROIResponse {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	public List<String> getItems() {
+	public List<Map<String, Integer>> getItems() {
 		return items;
 	}
-	public void setItems(List<String> items) {
+	public void setItems(List<Map<String, Integer>> items) {
 		this.items = items;
 	}
 	public int getQuantity() {

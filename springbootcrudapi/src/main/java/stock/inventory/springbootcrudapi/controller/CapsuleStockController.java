@@ -308,7 +308,7 @@ public class CapsuleStockController {
 		//    			}
 		//			]
 		CapsuleStockROIResponse response = new CapsuleStockROIResponse();
-		List<String> items = new ArrayList<String>();
+		List<Map<String, Integer>> items = new ArrayList<Map<String, Integer>>();
 		int totalQuantity = 0;
 		double totalBuyInPrice = 0;
 		double totalCurrentPrice = 0;
@@ -345,7 +345,15 @@ public class CapsuleStockController {
 			        	currentPrice = Double.parseDouble(String.valueOf(roiDataArray[4]).trim());
 			        }
 			        if (soldPrice > 0 || currentPrice > 0) {
-		                items.add(String.valueOf(roiDataArray[0]).trim());
+			        	Map<String, Integer> item = new HashMap<>();
+			        	item.put(String.valueOf(roiDataArray[0]).trim(), 1);
+			    //    	items.add(item);
+			        	if (items.stream().anyMatch(m -> m.containsKey(item.keySet().iterator().next()))) {
+			        	    Map<String, Integer> existingItem = items.stream().filter(m -> m.containsKey(item.keySet().iterator().next())).findFirst().get();
+			        	    existingItem.put(existingItem.keySet().iterator().next(), existingItem.get(existingItem.keySet().iterator().next()) + 1);
+			        	} else {
+			        	    items.add(item);
+			        	}
 		                totalQuantity += quantity;
 		                totalBuyInPrice += buyInPrice;
 		                recordFound++;
