@@ -309,6 +309,7 @@ public class CapsuleStockController {
 		//			]
 		CapsuleStockROIResponse response = new CapsuleStockROIResponse();
 		List<Map<String, Integer>> items = new ArrayList<Map<String, Integer>>();
+		List<Map<String, Integer>> missingItems = new ArrayList<Map<String, Integer>>();
 		int totalQuantity = 0;
 		double totalBuyInPrice = 0;
 		double totalCurrentPrice = 0;
@@ -326,12 +327,25 @@ public class CapsuleStockController {
 			response.setMsg("Please input trade records");
 			return response;
 		}
-		  
+
+		Set<Integer> tradeIds = new HashSet<>();
+		for (CapsuleROIRequest capsuleROIRequest : capsuleROIRequests) {
+		    int tradeId = capsuleROIRequest.getTradeId();
+		    if (tradeIds.contains(tradeId)) {
+		    	response.setCode("ROI-CAPSULE-FAIL");
+		    	response.setStatus("Failed");
+		    	response.setMsg("Duplicate trade record '" + tradeId + "' found in request body. Please ensure that each trade record is unique.");
+		        return response;
+		    }
+		    tradeIds.add(tradeId);
+		}
+		
 		try {
 			for (CapsuleROIRequest capsuleROIRequest : capsuleROIRequests) {
 			    int tradeId = capsuleROIRequest.getTradeId();
 			    Object[] roiDataArray = capsuleStockService.getCapsuleROIHybrid(tradeId);
 
+			    
 			    if (roiDataArray != null) {
 			        Double quantity = Double.parseDouble(String.valueOf(roiDataArray[1]).trim());
 			        Double buyInPrice = Double.parseDouble(String.valueOf(roiDataArray[2]).trim());
@@ -347,7 +361,6 @@ public class CapsuleStockController {
 			        if (soldPrice > 0 || currentPrice > 0) {
 			        	Map<String, Integer> item = new HashMap<>();
 			        	item.put(String.valueOf(roiDataArray[0]).trim(), 1);
-			    //    	items.add(item);
 			        	if (items.stream().anyMatch(m -> m.containsKey(item.keySet().iterator().next()))) {
 			        	    Map<String, Integer> existingItem = items.stream().filter(m -> m.containsKey(item.keySet().iterator().next())).findFirst().get();
 			        	    existingItem.put(existingItem.keySet().iterator().next(), existingItem.get(existingItem.keySet().iterator().next()) + 1);
@@ -366,6 +379,10 @@ public class CapsuleStockController {
 		                    totalProfit += (currentPrice - buyInPrice);
 		                }
 		            }
+			    } else {
+	            	Map<String, Integer> missingItem = new HashMap<>();
+	            	missingItem.put("tradeId", capsuleROIRequest.getTradeId());
+	            	missingItems.add(missingItem);
 			    }
 			}
 			if (recordFound > 0) {
@@ -377,6 +394,9 @@ public class CapsuleStockController {
 				response.setStatus("Success");
 				response.setMsg("Get capsule ROI successfully");
 				response.setItems(new ArrayList<>(new HashSet<>(items)));
+				if (missingItems.size() > 0) {
+					response.setMissingItems(missingItems);
+				}
 				response.setQuantity(totalQuantity);
 				response.setTotalBuyInPrice(roundUpToDecimal2(totalBuyInPrice));
 				response.setTotalCurrentPrice(roundUpToDecimal2(totalCurrentPrice));
@@ -384,6 +404,10 @@ public class CapsuleStockController {
 				response.setAverageProfit(roundUpToDecimal2(averageProfit));
 				response.setAverageROI(Double.toString(roundUpToDecimal2(averageROI)) + "%");
 				response.setRecordFound(recordFound);
+			} else {
+				if (missingItems.size() > 0) {
+					response.setMissingItems(missingItems);
+				}
 			}
 		} catch(Exception e) {
 			response.setCode("ROI-CAPSULE-ERROR");
