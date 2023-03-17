@@ -23,6 +23,7 @@ public class CapsuleStockROIResponse {
 	private String error;
 	private String msg;
     private List<Map<String, Integer>> items;
+    private List<Map<String, Integer>> missingItems;
 	private int quantity;
 	private double profit;
 	private double totalBuyInPrice;
@@ -61,6 +62,12 @@ public class CapsuleStockROIResponse {
 	}
 	public void setItems(List<Map<String, Integer>> items) {
 		this.items = items;
+	}
+	public List<Map<String, Integer>> getMissingItems() {
+		return missingItems;
+	}
+	public void setMissingItems(List<Map<String, Integer>> missingItems) {
+		this.missingItems = missingItems;
 	}
 	public int getQuantity() {
 		return quantity;
