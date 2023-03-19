@@ -38,7 +38,7 @@ public class CapsuleStock {
 	private float buyInPrice;
 	
 	@Column(name="cashout_price")
-	private float cashoutPrice;
+	private Float cashoutPrice;
 	
 	@Column(name="trade_time")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -95,11 +95,11 @@ public class CapsuleStock {
 		this.buyInPrice = buyInPrice;
 	}
 
-	public float getCashoutPrice() {
+	public Float getCashoutPrice() {
 		return cashoutPrice;
 	}
 
-	public void setCashoutPrice(float cashoutPrice) {
+	public void setCashoutPrice(Float cashoutPrice) {
 		this.cashoutPrice = cashoutPrice;
 	}
 
