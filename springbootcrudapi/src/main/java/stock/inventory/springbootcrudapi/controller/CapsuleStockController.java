@@ -421,5 +421,9 @@ public class CapsuleStockController {
 	    return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 	
-	//List<Map<String,String>> top3ROI = new ArrayList<>();
+	// get capsule full set to order by roi (small task)
+	
+	//cal cost (medium task)
+	
+	//cal total worth without sold item (medium task)
 }
