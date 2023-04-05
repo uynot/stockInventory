@@ -17,7 +17,7 @@ import jakarta.persistence.Transient;
 @Table(name="tb_capsule_stock")
 public class CapsuleStock {
 
-	@Id
+	@Id//test
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="trade_id")
 	private Integer tradeId;
