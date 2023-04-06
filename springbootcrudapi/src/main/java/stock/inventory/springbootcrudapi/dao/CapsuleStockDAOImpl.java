@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
-import stock.inventory.springbootcrudapi.model.CapsuleStock;
+import stock.inventory.springbootcrudapi.model.ItemStock;
 
 @Repository
 public class CapsuleStockDAOImpl implements CapsuleStockDAO {
@@ -21,25 +21,25 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 	
 	@Transactional
 	@Override
-	public List<CapsuleStock> getCapsuleStockFull() {
+	public List<ItemStock> getCapsuleStockFull() {
 		Session currentSession = em.unwrap(Session.class);
-		Query<CapsuleStock> query = currentSession.createQuery("from capsuleStock", CapsuleStock.class);
-		List<CapsuleStock> capsuleList = query.getResultList();
+		Query<ItemStock> query = currentSession.createQuery("from capsuleStock", ItemStock.class);
+		List<ItemStock> capsuleList = query.getResultList();
 		
 		return capsuleList;
 	}
 
 	@Override
-	public CapsuleStock getCapsuleStockSingle(int tradeId) {
+	public ItemStock getCapsuleStockSingle(int tradeId) {
 		Session currentSession = em.unwrap(Session.class);
-		CapsuleStock capsuleStock = currentSession.get(CapsuleStock.class, tradeId);
+		ItemStock capsuleStock = currentSession.get(ItemStock.class, tradeId);
 		
 		return capsuleStock;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock) {
+	public String saveOrUpdateCapsuleStock(ItemStock capsuleStock) {
 		String result = "";
 		Session currentSession = em.unwrap(Session.class);
 		
@@ -59,7 +59,7 @@ public class CapsuleStockDAOImpl implements CapsuleStockDAO {
 	public String deleteCapsuleStock(int tradeId) {
 		String result = "";
 		Session currentSession = em.unwrap(Session.class);
-		CapsuleStock capsuleStock = currentSession.get(CapsuleStock.class, tradeId);
+		ItemStock capsuleStock = currentSession.get(ItemStock.class, tradeId);
 		
 		try {
 			currentSession.delete(capsuleStock);

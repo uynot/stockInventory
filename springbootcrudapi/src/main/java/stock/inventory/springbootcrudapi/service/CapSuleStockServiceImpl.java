@@ -12,7 +12,7 @@ import org.hibernate.Session;
 
 import stock.inventory.springbootcrudapi.dao.CapsuleStockDAO;
 import stock.inventory.springbootcrudapi.dao.CapsuleStockDAOImpl;
-import stock.inventory.springbootcrudapi.model.CapsuleStock;
+import stock.inventory.springbootcrudapi.model.ItemStock;
 import stock.inventory.springbootcrudapi.response.CapsuleStockStandardResponse;
 
 @Service
@@ -23,19 +23,19 @@ public class CapSuleStockServiceImpl implements CapsuleStockService{
 	
 	@Transactional
 	@Override
-	public List<CapsuleStock> getCapsuleStockFull() {
+	public List<ItemStock> getCapsuleStockFull() {
 		return capsuleStockDAO.getCapsuleStockFull();
 	}
 
 	@Transactional
 	@Override
-	public CapsuleStock getCapsuleStockSingle(int tradeId) {
+	public ItemStock getCapsuleStockSingle(int tradeId) {
 		return capsuleStockDAO.getCapsuleStockSingle(tradeId);
 	}
 
 	@Transactional
 	@Override
-	public String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock) {
+	public String saveOrUpdateCapsuleStock(ItemStock capsuleStock) {
 		return capsuleStockDAO.saveOrUpdateCapsuleStock(capsuleStock);
 	}
 

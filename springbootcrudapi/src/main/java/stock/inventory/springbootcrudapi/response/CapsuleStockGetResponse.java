@@ -13,7 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import stock.inventory.springbootcrudapi.model.CapsuleStock;
+import stock.inventory.springbootcrudapi.model.ItemStock;
 
 //@data
 public class CapsuleStockGetResponse {
@@ -22,7 +22,7 @@ public class CapsuleStockGetResponse {
 	private String status;
 	private String error;
 	private String msg;
-    private List<CapsuleStock> data;
+    private List<ItemStock> data;
     
 	public String getCode() {
 		return code;
@@ -52,10 +52,10 @@ public class CapsuleStockGetResponse {
 		this.msg = msg;
 	}
 	
-	public List<CapsuleStock> getData() {
+	public List<ItemStock> getData() {
 		return data;
 	}
-	public void setData(List<CapsuleStock> data) {
+	public void setData(List<ItemStock> data) {
 		this.data = data;
 	}
 }

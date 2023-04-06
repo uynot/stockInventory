@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import stock.inventory.springbootcrudapi.model.CapsuleStock;
+import stock.inventory.springbootcrudapi.model.ItemStock;
 import stock.inventory.springbootcrudapi.request.CapsuleROIRequest;
 import stock.inventory.springbootcrudapi.request.SaveCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
@@ -46,7 +46,7 @@ public class CapsuleStockController {
 	@GetMapping("/capsule/getCapsuleStockFull")
 	public CapsuleStockGetResponse getCapsuleStockFull() {
 		CapsuleStockGetResponse response = new CapsuleStockGetResponse();
-		List<CapsuleStock> dataList = new ArrayList<CapsuleStock>();
+		List<ItemStock> dataList = new ArrayList<ItemStock>();
 		
 		response.setCode("GET-CAPSULE-FAIL");
 		response.setStatus("Failed");
@@ -81,7 +81,7 @@ public class CapsuleStockController {
 		//				"23"
 		//			}
 		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
-		CapsuleStock capsuleStock = new CapsuleStock();
+		ItemStock capsuleStock = new ItemStock();
 		String getSuccessOrFail = "Failed";
 		
 		response.setCode("GET-CAPSULE-FAIL");
@@ -125,7 +125,7 @@ public class CapsuleStockController {
 		//				"buffUrl": "1"
 		//			}
 		
-		CapsuleStock capsuleStock = new CapsuleStock();
+		ItemStock capsuleStock = new ItemStock();
 		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
 		Float buyInPrice = saveCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = saveCapsuleStockRequest.getCashoutPrice();
@@ -198,7 +198,7 @@ public class CapsuleStockController {
 		//				"tradeTime": "2022-02-20T00:00:00",
 		//				"buffUrl": "1"
 		//			}
-		CapsuleStock capsuleStock = new CapsuleStock();
+		ItemStock capsuleStock = new ItemStock();
 		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
 		Float buyInPrice = updateCapsuleStockRequest.getBuyInPrice();
 		Float cashoutPrice = updateCapsuleStockRequest.getCashoutPrice();
@@ -265,7 +265,7 @@ public class CapsuleStockController {
 		//				"23"
 		//			}
 		CapsuleStockStandardResponse response = new CapsuleStockStandardResponse();
-		CapsuleStock capsuleStock = new CapsuleStock();
+		ItemStock capsuleStock = new ItemStock();
 		String deleteSuccessOrFail = "Failed";
 		
 		response.setCode("DELETE-CAPSULE-FAIL");
