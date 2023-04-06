@@ -1,15 +1,15 @@
 package stock.inventory.springbootcrudapi.service;
 
 import java.util.List;
-import stock.inventory.springbootcrudapi.model.CapsuleStock;
+import stock.inventory.springbootcrudapi.model.ItemStock;
 
 public interface CapsuleStockService {
 	
-	List<CapsuleStock> getCapsuleStockFull();
+	List<ItemStock> getCapsuleStockFull();
 	
-	CapsuleStock getCapsuleStockSingle(int tradeId);
+	ItemStock getCapsuleStockSingle(int tradeId);
 	
-	String saveOrUpdateCapsuleStock(CapsuleStock capsuleStock);
+	String saveOrUpdateCapsuleStock(ItemStock capsuleStock);
 	
 	String deleteCapsuleStock(int tradeId);
 	
