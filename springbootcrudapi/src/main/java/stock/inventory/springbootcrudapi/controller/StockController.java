@@ -29,51 +29,66 @@ import stock.inventory.springbootcrudapi.model.ItemStock;
 import stock.inventory.springbootcrudapi.request.CapsuleROIRequest;
 import stock.inventory.springbootcrudapi.request.SaveCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
-import stock.inventory.springbootcrudapi.response.CapsuleStockGetResponse;
 import stock.inventory.springbootcrudapi.response.CapsuleStockROIResponse;
-import stock.inventory.springbootcrudapi.response.CapsuleStockStandardResponse;
-import stock.inventory.springbootcrudapi.service.CapsuleStockService;
+import stock.inventory.springbootcrudapi.response.StockGetResponse;
+import stock.inventory.springbootcrudapi.service.StockService;
 
 @RestController
 @RequestMapping("/api")
-public class CapsuleStockController {
+public class StockController {
 	
 	@Autowired
-	private CapsuleStockService capsuleStockService;
+	private StockService stockService;
 	
-	//Full Single Hybrid
+	//Full Delta
 	
-	@GetMapping("/capsule/getCapsuleStockFull")
-	public CapsuleStockGetResponse getCapsuleStockFull() {
-		CapsuleStockGetResponse response = new CapsuleStockGetResponse();
-		List<ItemStock> dataList = new ArrayList<ItemStock>();
+	@GetMapping("/capsule/getStockFull")
+	public StockGetResponse getCapsuleStockFull() {
+		StockGetResponse response = new StockGetResponse();
+		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
+		List<Map<String,Object>> items = new ArrayList<Map<String,Object>>();
 		
-		response.setCode("GET-CAPSULE-FAIL");
+		response.setCode("GET_FULL_STOCK_FAIL");
 		response.setStatus("Failed");
 		response.setError(null);
 		response.setData(null);
-		
+
 		try {
-			dataList = capsuleStockService.getCapsuleStockFull();
+			itemStockList = stockService.getStockFull();
 			
-			if(dataList == null) {
-				response.setCode("GET-CAPSULE-SUCCESS");
+			if (itemStockList.isEmpty()) {
+				response.setCode("GET_FULL_STOCK_SUCCESS");
 				response.setStatus("Success");
 				response.setMsg("Record not found");
 			} else {
-				response.setData(dataList);
-				response.setCode("GET-CAPSULE-SUCCESS");
+				Map<String,Object> item;
+				
+				for(ItemStock itemStock : itemStockList) {
+					item = new HashMap<String,Object>();
+					item.put("stockId", itemStock.getStockId());
+					item.put("itemName", itemStock.getItem().getItemName());
+					item.put("itemType", itemStock.getItemType().getItemType());
+					item.put("stockInPrice", itemStock.getTransaction().getPrice());
+					item.put("currentPrice", itemStock.getItem().getPrice().getCurrentPrice());
+					items.add(item);
+				}
+
+				response.setData(items);
+				response.setCode("GET_FULL_STOCK_SUCCESS");
 				response.setStatus("Success");
-				response.setMsg("Get capsule trade record successfully");
+				response.setMsg("Get stock inventory successfully");
 			}
 		} catch(Exception e) {
 			response.setError(e.getMessage());
-			response.setCode("GET-CAPSULE-ERROR");
-			response.setMsg("Error occupied when getting capsule trade record.");
+			response.setCode("GET_FULL_STOCK_ERROR");
+			response.setMsg("Error occupied when getting stock inventory.");
 		}
-		
 		return response;
 	}
+	
+	//get full list (group by quantity)
+	
+	//get by type method
 	
 	@GetMapping("/capsule/getCapsuleStock/{tradeId}")
 	public CapsuleStockStandardResponse getCapsuleStockSingle(@PathVariable Integer tradeId) throws Exception {
@@ -418,7 +433,9 @@ public class CapsuleStockController {
 	}
 
 	private double roundUpToDecimal2(double value) {
-	    return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	     double roundedValue = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	     
+	     return roundedValue;
 	}
 	
 	// get capsule full set to order by roi (small task)

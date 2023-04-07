@@ -1,28 +1,19 @@
 package stock.inventory.springbootcrudapi.response;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import stock.inventory.springbootcrudapi.model.ItemStock;
 
 //@data
-public class CapsuleStockGetResponse {
+public class StockGetResponse {
 	
 	private String code;
 	private String status;
 	private String error;
 	private String msg;
-    private List<ItemStock> data;
+//    private List<ItemStock> data;
+    private List<Map<String,Object>> data;
     
 	public String getCode() {
 		return code;
@@ -52,10 +43,17 @@ public class CapsuleStockGetResponse {
 		this.msg = msg;
 	}
 	
-	public List<ItemStock> getData() {
+//	public List<ItemStock> getData() {
+//		return data;
+//	}
+//	public void setData(List<ItemStock> data) {
+//		this.data = data;
+//	}
+	
+	public List<Map<String,Object>> getData() {
 		return data;
 	}
-	public void setData(List<ItemStock> data) {
+	public void setData(List<Map<String,Object>> data) {
 		this.data = data;
 	}
 }
