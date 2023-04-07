@@ -34,9 +34,6 @@ public class Transaction {
     @Column(name = "price")
     private float price;
 
-    @Column(name = "quantity")
-    private int quantity;
-
     @Column(name = "trade_time")
 	@Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime tradeTime;
@@ -74,14 +71,6 @@ public class Transaction {
 
 	public void setPrice(float price) {
 		this.price = price;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	public LocalDateTime getTradeTime() {
