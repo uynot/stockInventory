@@ -29,7 +29,8 @@ public class Item {
     @Column(name = "market_url")
     private String marketUrl;
 
-    @OneToMany(mappedBy = "item")
+    @ManyToOne
+    @JoinColumn(name = "item")
     private Price price;
 	//private List<Price> prices; item.getPrices()
 
@@ -72,7 +73,5 @@ public class Item {
 	public void setPrice(Price price) {
 		this.price = price;
 	}
-
-    
 }
 

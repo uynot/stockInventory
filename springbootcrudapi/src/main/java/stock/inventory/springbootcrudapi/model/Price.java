@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 
-@Entity
+@Entity(name = "price")
 @Table(name = "price")
 public class Price {
 

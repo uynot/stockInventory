@@ -46,10 +46,10 @@ public class StockDAOImpl implements StockDAO {
 			int i = 0;
 			itemStock = new ItemStock();
 			itemStock.setStockId((int)objects[i++]);
-			itemStock.getItem().setItemName((String) objects[i++]);
-			itemStock.getItemType().setItemType((String)objects[i++]);
-			itemStock.getTransaction().setPrice((float)objects[i++]);
-			itemStock.getItem().getPrice().setCurrentPrice((float)objects[i++]);
+			itemStock.setItemName((String) objects[i++]);
+			itemStock.setItemType((String)objects[i++]);
+			itemStock.setStockInPrice((float)objects[i++]);
+			itemStock.setCurrentPrice((float)objects[i++]);
 			itemStockList.add(itemStock);
 		}
 
