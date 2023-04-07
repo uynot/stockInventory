@@ -32,6 +32,7 @@ import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.response.CapsuleStockROIResponse;
 import stock.inventory.springbootcrudapi.response.StockGetResponse;
 import stock.inventory.springbootcrudapi.service.StockService;
+import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @RestController
 @RequestMapping("/api")
@@ -47,10 +48,13 @@ public class StockController {
 		StockGetResponse response = new StockGetResponse();
 		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
 		List<Map<String,Object>> items = new ArrayList<Map<String,Object>>();
+		QuantityByItemType quantityByItemType = new QuantityByItemType();
 		
 		response.setCode("GET_FULL_STOCK_FAIL");
 		response.setStatus("Failed");
 		response.setError(null);
+		response.setItemQuantity(0);
+		response.setQuantityByItemType(quantityByItemType);
 		response.setData(null);
 
 		try {
@@ -61,6 +65,8 @@ public class StockController {
 				response.setStatus("Success");
 				response.setMsg("Record not found");
 			} else {
+				quantityByItemType = stockService.getQuantityByItemTypeFull();
+				
 				Map<String,Object> item;
 				
 				for(ItemStock itemStock : itemStockList) {
@@ -74,6 +80,7 @@ public class StockController {
 				}
 
 				response.setData(items);
+				response.setQuantityByItemType(quantityByItemType);
 				response.setCode("GET_FULL_STOCK_SUCCESS");
 				response.setStatus("Success");
 				response.setMsg("Get stock inventory successfully");

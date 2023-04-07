@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import stock.inventory.springbootcrudapi.model.ItemStock;
+import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 //@data
 public class StockGetResponse {
@@ -12,7 +13,9 @@ public class StockGetResponse {
 	private String status;
 	private String error;
 	private String msg;
-//    private List<ItemStock> data;
+	private int itemQuantity;
+	private QuantityByItemType quantityByItemType;
+//  private List<ItemStock> data;
     private List<Map<String,Object>> data;
     
 	public String getCode() {
@@ -55,5 +58,17 @@ public class StockGetResponse {
 	}
 	public void setData(List<Map<String,Object>> data) {
 		this.data = data;
+	}
+	public int getItemQuantity() {
+		return itemQuantity;
+	}
+	public void setItemQuantity(int itemQuantity) {
+		this.itemQuantity = itemQuantity;
+	}
+	public QuantityByItemType getQuantityByItemType() {
+		return quantityByItemType;
+	}
+	public void setQuantityByItemType(QuantityByItemType quantityByItemType) {
+		this.quantityByItemType = quantityByItemType;
 	}
 }

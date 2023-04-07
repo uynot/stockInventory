@@ -12,6 +12,7 @@ import jakarta.persistence.Query;
 
 import org.hibernate.Session;
 import stock.inventory.springbootcrudapi.model.ItemStock;
+import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @Repository
 public class StockDAOImpl implements StockDAO {
@@ -54,6 +55,12 @@ public class StockDAOImpl implements StockDAO {
 		}
 
 		return itemStockList;
+	}
+	
+	public QuantityByItemType getQuantityByItemTypeFull() {
+		
+		//incomplete
+		return null;
 	}
 
 //	@Override
