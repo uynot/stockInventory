@@ -20,23 +20,19 @@ public class ItemStock {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "stock_id")
     private int stockId;
+    
+    @Column(name = "transaction_id_fk")
+	int transactionId;
+    
+    @Column(name = "item_id_fk")
+    private int itemId;
+    
+    @Column(name = "item_type_id_fk")
+	private int itemTypeId;
 
-    @ManyToOne
-    @JoinColumn(name = "transaction_id_fk")
-    private Transaction transaction;
-
-    @ManyToOne
-    @JoinColumn(name = "item_id_fk")
-    private Item item;
-
-    @ManyToOne
-    @JoinColumn(name = "item_type_id_fk")
-    private ItemType itemType;
-
-    @ManyToOne
-    @JoinColumn(name = "skin_condition_id_fk")
-    private SkinCondition skinCondition;
-
+    @Column(name = "skin_condition_id_fk")
+	private int skinConditionId;
+    
     @Column(name = "float_value")
     private Float floatValue;
 
@@ -46,6 +42,14 @@ public class ItemStock {
 
     @Column(name = "remark")
     private String remark;
+    
+    @Transient String itemName;
+    
+    @Transient String itemType;
+    
+    @Transient float stockInPrice;
+    
+    @Transient float currentPrice;
 
 	public int getStockId() {
 		return stockId;
@@ -55,36 +59,36 @@ public class ItemStock {
 		this.stockId = stockId;
 	}
 
-	public Transaction getTransaction() {
-		return transaction;
+	public int getTransactionId() {
+		return transactionId;
 	}
 
-	public void setTransaction(Transaction transaction) {
-		this.transaction = transaction;
+	public void setTransactionId(int transactionId) {
+		this.transactionId = transactionId;
 	}
 
-	public Item getItem() {
-		return item;
+	public int getItemId() {
+		return itemId;
 	}
 
-	public void setItem(Item item) {
-		this.item = item;
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
 	}
 
-	public ItemType getItemType() {
-		return itemType;
+	public int getItemTypeId() {
+		return itemTypeId;
 	}
 
-	public void setItemType(ItemType itemType) {
-		this.itemType = itemType;
+	public void setItemTypeId(int itemTypeId) {
+		this.itemTypeId = itemTypeId;
 	}
 
-	public SkinCondition getSkinCondition() {
-		return skinCondition;
+	public int getSkinConditionId() {
+		return skinConditionId;
 	}
 
-	public void setSkinCondition(SkinCondition skinCondition) {
-		this.skinCondition = skinCondition;
+	public void setSkinConditionId(int skinConditionId) {
+		this.skinConditionId = skinConditionId;
 	}
 
 	public Float getFloatValue() {
@@ -109,5 +113,37 @@ public class ItemStock {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+
+	public float getStockInPrice() {
+		return stockInPrice;
+	}
+
+	public void setStockInPrice(float stockInPrice) {
+		this.stockInPrice = stockInPrice;
+	}
+
+	public float getCurrentPrice() {
+		return currentPrice;
+	}
+
+	public void setCurrentPrice(float currentPrice) {
+		this.currentPrice = currentPrice;
 	}
 }
