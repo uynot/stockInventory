@@ -22,7 +22,6 @@ public class StockServiceImpl implements StockService{
 		return stockDAO.getStockFull();
 	}
 	
-	@Override
 	public QuantityByItemType getQuantityByItemTypeFull() {
 		return stockDAO.getQuantityByItemTypeFull();
 	}
