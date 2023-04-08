@@ -12,6 +12,7 @@ import jakarta.persistence.Query;
 
 import org.hibernate.Session;
 import stock.inventory.springbootcrudapi.model.ItemStock;
+import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @Repository
 public class StockDAOImpl implements StockDAO {
@@ -33,7 +34,7 @@ public class StockDAOImpl implements StockDAO {
 				   + "s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
 				   + "FROM item_stock s "
 				   + "JOIN item item ON item.item_id = s.item_id_fk "
-				   + "JOIN item_type type ON type.item_type_id = s.item_type_id_fk "
+				   + "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
 				   + "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
 				   + "JOIN price p ON p.item_id_fk = item.item_id "
 				   + "WHERE t.action = 'buy' "
@@ -55,7 +56,61 @@ public class StockDAOImpl implements StockDAO {
 
 		return itemStockList;
 	}
+	
+	public QuantityByItemType getQuantityByItemTypeFull() {
+		QuantityByItemType quantityByItemType = new QuantityByItemType();
+		
+		String capsuleCountSql = "SELECT COUNT(`type`.item_type_id) AS capsule_count "
+							   + "FROM item_stock AS capsule "
+							   + "JOIN item item ON item.item_id = capsule.item_id_fk "
+							   + "JOIN item_type `type` ON `type`.item_type_id = item.item_type_id_fk "
+							   + "WHERE `type`.item_type_id = '1'";
+		Query capsuleQuery = em.createNativeQuery(capsuleCountSql);
+		int capsuleCount = ((Number) capsuleQuery.getSingleResult()).intValue();
+		quantityByItemType.setCapsule(capsuleCount);
+		
+		String caseCountSql = "SELECT COUNT(`type`.item_type_id) AS case_count "
+							+ "FROM item_stock AS `case` "
+							+ "JOIN item item ON item.item_id = `case`.item_id_fk "
+							+ "JOIN item_type `type` ON `type`.item_type_id = item.item_type_id_fk "
+							+ "WHERE `type`.item_type_id = '2'";
+		Query caseQuery = em.createNativeQuery(caseCountSql);
+		int caseCount = ((Number) caseQuery.getSingleResult()).intValue();
+		quantityByItemType.setCase(caseCount);
+		
+		String skinCountSql = "SELECT COUNT(`type`.item_type_id) AS skin_count "
+							+ "FROM item_stock AS skin "
+							+ "JOIN item item ON item.item_id = skin.item_id_fk "
+							+ "JOIN item_type `type` ON `type`.item_type_id = item.item_type_id_fk "
+							+ "WHERE `type`.item_type_id = '3'";
+		Query skinQuery = em.createNativeQuery(skinCountSql);
+		int skinCount = ((Number) skinQuery.getSingleResult()).intValue();
+		quantityByItemType.setSkin(skinCount);
+		
+		String stickerCountSql = "SELECT COUNT(`type`.item_type_id) AS sticker_count "
+							   + "FROM item_stock AS sticker "
+							   + "JOIN item item ON item.item_id = sticker.item_id_fk "
+							   + "JOIN item_type `type` ON `type`.item_type_id = item.item_type_id_fk "
+							   + "WHERE `type`.item_type_id = '4'";
+		Query stickerQuery = em.createNativeQuery(stickerCountSql);
+		int stickerCount = ((Number) stickerQuery.getSingleResult()).intValue();
+		quantityByItemType.setSticker(stickerCount);
+		
+		return quantityByItemType;
+	}
 
+	
+	/*public String assignedToSSA(Elder elder) {
+
+		Elder e = em.find(Elder.class, elder.getElderId());
+		e.setResponsibleSSA(elder.getResponsibleSSA());
+		em.merge(e);
+
+		return "Applicant had been assigned.";
+	} */
+	
+	//query.setParameter("elderId", elderId);
+	
 //	@Override
 //	public ItemStock getCapsuleStockSingle(int tradeId) {
 //		Session currentSession = em.unwrap(Session.class);

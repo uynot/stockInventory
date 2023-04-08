@@ -26,9 +26,6 @@ public class ItemStock {
     
     @Column(name = "item_id_fk")
     private int itemId;
-    
-    @Column(name = "item_type_id_fk")
-	private int itemTypeId;
 
     @Column(name = "skin_condition_id_fk")
 	private int skinConditionId;
@@ -73,14 +70,6 @@ public class ItemStock {
 
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
-	}
-
-	public int getItemTypeId() {
-		return itemTypeId;
-	}
-
-	public void setItemTypeId(int itemTypeId) {
-		this.itemTypeId = itemTypeId;
 	}
 
 	public int getSkinConditionId() {

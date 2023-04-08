@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import stock.inventory.springbootcrudapi.dao.StockDAO;
 import stock.inventory.springbootcrudapi.model.ItemStock;
+import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @Service
 public class StockServiceImpl implements StockService{
@@ -19,6 +20,10 @@ public class StockServiceImpl implements StockService{
 	@Override
 	public List<ItemStock> getStockFull() {
 		return stockDAO.getStockFull();
+	}
+	
+	public QuantityByItemType getQuantityByItemTypeFull() {
+		return stockDAO.getQuantityByItemTypeFull();
 	}
 
 //	@Transactional
