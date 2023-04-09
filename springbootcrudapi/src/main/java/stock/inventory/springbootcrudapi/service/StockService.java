@@ -9,6 +9,14 @@ public interface StockService {
 	List<ItemStock> getStockFull();
 
 	QuantityByItemType getQuantityByItemTypeFull();
+
+	List<ItemStock> getCapsuleFull();
+
+	List<ItemStock> getCaseFull();
+
+	List<ItemStock> getSkinFull();
+
+	List<ItemStock> getStickerFull();
 	
 	//ItemStock getCapsuleStockSingle(int tradeId);
 	
