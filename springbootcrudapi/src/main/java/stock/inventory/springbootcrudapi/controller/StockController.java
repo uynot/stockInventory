@@ -32,6 +32,7 @@ import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.response.CapsuleStockROIResponse;
 import stock.inventory.springbootcrudapi.response.StockGetResponse;
 import stock.inventory.springbootcrudapi.service.StockService;
+import stock.inventory.springbootcrudapi.utility.ListByItemType;
 import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @RestController
@@ -44,11 +45,25 @@ public class StockController {
 	//Full Delta
 	
 	@GetMapping("/stock/getStockFull")
-	public StockGetResponse getCapsuleStockFull() {
+	public StockGetResponse getStockFull() {
 		StockGetResponse response = new StockGetResponse();
 		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
-		List<Map<String,Object>> items = new ArrayList<Map<String,Object>>();
 		QuantityByItemType quantityByItemType = new QuantityByItemType();
+		
+		ListByItemType listByItemType = new ListByItemType();
+		
+		List<ItemStock> capsuleList = new ArrayList<ItemStock>();
+		List<Map<String,Object>> capsules = new ArrayList<Map<String,Object>>();
+		
+		List<ItemStock> caseList = new ArrayList<ItemStock>();
+		List<Map<String,Object>> cases = new ArrayList<Map<String,Object>>();
+		
+		List<ItemStock> skinList = new ArrayList<ItemStock>();
+		List<Map<String,Object>> skins = new ArrayList<Map<String,Object>>();
+		
+		List<ItemStock> stickerList = new ArrayList<ItemStock>();
+		List<Map<String,Object>> stickers = new ArrayList<Map<String,Object>>();
+		
 		
 		response.setCode("GET_FULL_STOCK_FAIL");
 		response.setStatus("Failed");
@@ -67,25 +82,75 @@ public class StockController {
 			} else {
 				quantityByItemType = stockService.getQuantityByItemTypeFull();
 				
-				Map<String,Object> item;
+				capsuleList = stockService.getCapsuleFull();
+				caseList = stockService.getCaseFull();
+				skinList = stockService.getSkinFull();
+				stickerList = stockService.getStickerFull();
 				
-				for(ItemStock itemStock : itemStockList) {
-					item = new HashMap<String,Object>();
-					item.put("stockId", itemStock.getStockId());
-					item.put("itemName", itemStock.getItemName());
-					item.put("itemType", itemStock.getItemType());
-					item.put("stockInPrice", itemStock.getStockInPrice());
-					item.put("currentPrice", itemStock.getCurrentPrice());
-					items.add(item);
+				if (capsuleList.size() > 0) {
+					Map<String,Object> capsule;
+					for(ItemStock itemStock : capsuleList) {
+						capsule = new HashMap<String,Object>();
+						capsule.put("stockId", itemStock.getStockId());
+						capsule.put("itemName", itemStock.getItemName());
+						capsule.put("itemType", itemStock.getItemType());
+						capsule.put("stockInPrice", itemStock.getStockInPrice());
+						capsule.put("currentPrice", itemStock.getCurrentPrice());
+						capsules.add(capsule);
+					}
+					listByItemType.setCapsule(capsules);
+				}
+				
+				if (caseList.size() > 0) {
+					Map<String,Object> container;
+					for(ItemStock itemStock : caseList) {
+						container = new HashMap<String,Object>();
+						container.put("stockId", itemStock.getStockId());
+						container.put("itemName", itemStock.getItemName());
+						container.put("itemType", itemStock.getItemType());
+						container.put("stockInPrice", itemStock.getStockInPrice());
+						container.put("currentPrice", itemStock.getCurrentPrice());
+						cases.add(container);
+					}
+					listByItemType.setCase(cases);
+				}
+				
+				if (skinList.size() > 0) {
+					Map<String,Object> skin;
+					for(ItemStock itemStock : skinList) {
+						skin = new HashMap<String,Object>();
+						skin.put("stockId", itemStock.getStockId());
+						skin.put("itemName", itemStock.getItemName());
+						skin.put("itemType", itemStock.getItemType());
+						skin.put("stockInPrice", itemStock.getStockInPrice());
+						skin.put("currentPrice", itemStock.getCurrentPrice());
+						skins.add(skin);
+					}
+					listByItemType.setSkin(skins);
+				}
+				
+				if(stickerList.size() > 0) {
+					for(ItemStock itemStock : stickerList) {
+						Map<String,Object> sticker;
+						sticker = new HashMap<String,Object>();
+						sticker.put("stockId", itemStock.getStockId());
+						sticker.put("itemName", itemStock.getItemName());
+						sticker.put("itemType", itemStock.getItemType());
+						sticker.put("stockInPrice", itemStock.getStockInPrice());
+						sticker.put("currentPrice", itemStock.getCurrentPrice());
+						stickers.add(sticker);
+					}
+					listByItemType.setSticker(stickers);
 				}
 
-				response.setData(items);
+				response.setData(listByItemType);
 				response.setQuantityByItemType(quantityByItemType);
 				response.setCode("GET_FULL_STOCK_SUCCESS");
 				response.setStatus("Success");
 				response.setMsg("Get stock inventory successfully");
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
 			response.setError(e.getMessage());
 			response.setCode("GET_FULL_STOCK_ERROR");
 			response.setMsg("Error occupied when getting stock inventory.");

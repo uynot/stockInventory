@@ -16,7 +16,6 @@ public class StockServiceImpl implements StockService{
 	@Autowired
 	private StockDAO stockDAO;
 	
-//	@Transactional
 	@Override
 	public List<ItemStock> getStockFull() {
 		return stockDAO.getStockFull();
@@ -25,7 +24,27 @@ public class StockServiceImpl implements StockService{
 	public QuantityByItemType getQuantityByItemTypeFull() {
 		return stockDAO.getQuantityByItemTypeFull();
 	}
-
+	
+	@Override
+	public List<ItemStock> getCapsuleFull() {
+		return stockDAO.getCapsuleFull();
+	}
+	
+	@Override
+	public List<ItemStock> getCaseFull() {
+		return stockDAO.getCaseFull();
+	}
+	
+	@Override
+	public List<ItemStock> getSkinFull() {
+		return stockDAO.getSkinFull();
+	}
+	
+	@Override
+	public List<ItemStock> getStickerFull() {
+		return stockDAO.getStickerFull();
+	}
+	
 //	@Transactional
 //	@Override
 //	public ItemStock getCapsuleStockSingle(int tradeId) {

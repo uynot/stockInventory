@@ -99,6 +99,137 @@ public class StockDAOImpl implements StockDAO {
 		return quantityByItemType;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ItemStock> getCapsuleFull() {
+		List<ItemStock> capsuleList = new ArrayList<ItemStock>();
+		ItemStock capsule = null;
+		String sql = "SELECT "
+				   + "	s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
+				   + "FROM item_stock s "
+				   + "JOIN item item ON item.item_id = s.item_id_fk "
+				   + "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
+				   + "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
+				   + "JOIN price p ON p.item_id_fk = item.item_id "
+				   + "WHERE t.action = 'buy' "
+				   + "	AND type.item_type_id = '1' "
+				   + "	AND s.status = 'available'";
+	
+		Query query = em.createNativeQuery(sql);
+		
+		List<Object[]> results = query.getResultList();
+		for (Object[] objects : results) {
+			int i = 0;
+			capsule = new ItemStock();
+			capsule.setStockId((int)objects[i++]);
+			capsule.setItemName((String) objects[i++]);
+			capsule.setItemType((String)objects[i++]);
+			capsule.setStockInPrice((float)objects[i++]);
+			capsule.setCurrentPrice((float)objects[i++]);
+			capsuleList.add(capsule);
+		}
+
+		return capsuleList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ItemStock> getCaseFull() {
+		List<ItemStock> caseList = new ArrayList<ItemStock>();
+		ItemStock cases = null;
+		String sql = "SELECT "
+				   + "	s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
+				   + "FROM item_stock s "
+				   + "JOIN item item ON item.item_id = s.item_id_fk "
+				   + "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
+				   + "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
+				   + "JOIN price p ON p.item_id_fk = item.item_id "
+				   + "WHERE t.action = 'buy' "
+				   + "	AND type.item_type_id = '2' "
+				   + "	AND s.status = 'available'";
+	
+		Query query = em.createNativeQuery(sql);
+		
+		List<Object[]> results = query.getResultList();
+		for (Object[] objects : results) {
+			int i = 0;
+			cases = new ItemStock();
+			cases.setStockId((int)objects[i++]);
+			cases.setItemName((String) objects[i++]);
+			cases.setItemType((String)objects[i++]);
+			cases.setStockInPrice((float)objects[i++]);
+			cases.setCurrentPrice((float)objects[i++]);
+			caseList.add(cases);
+		}
+
+		return caseList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ItemStock> getSkinFull() {
+		List<ItemStock> skinList = new ArrayList<ItemStock>();
+		ItemStock skin = null;
+		String sql = "SELECT "
+				   + "	s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
+				   + "FROM item_stock s "
+				   + "JOIN item item ON item.item_id = s.item_id_fk "
+				   + "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
+				   + "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
+				   + "JOIN price p ON p.item_id_fk = item.item_id "
+				   + "WHERE t.action = 'buy' "
+				   + "	AND type.item_type_id = '3' "
+				   + "	AND s.status = 'available'";
+	
+		Query query = em.createNativeQuery(sql);
+		
+		List<Object[]> results = query.getResultList();
+		for (Object[] objects : results) {
+			int i = 0;
+			skin = new ItemStock();
+			skin.setStockId((int)objects[i++]);
+			skin.setItemName((String) objects[i++]);
+			skin.setItemType((String)objects[i++]);
+			skin.setStockInPrice((float)objects[i++]);
+			skin.setCurrentPrice((float)objects[i++]);
+			skinList.add(skin);
+		}
+
+		return skinList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ItemStock> getStickerFull() {
+		List<ItemStock> stickerList = new ArrayList<ItemStock>();
+		ItemStock sticker = null;
+		String sql = "SELECT "
+				   + "	s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
+				   + "FROM item_stock s "
+				   + "JOIN item item ON item.item_id = s.item_id_fk "
+				   + "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
+				   + "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
+				   + "JOIN price p ON p.item_id_fk = item.item_id "
+				   + "WHERE t.action = 'buy' "
+				   + "	AND type.item_type_id = '4' "
+				   + "	AND s.status = 'available'";
+	
+		Query query = em.createNativeQuery(sql);
+		
+		List<Object[]> results = query.getResultList();
+		for (Object[] objects : results) {
+			int i = 0;
+			sticker = new ItemStock();
+			sticker.setStockId((int)objects[i++]);
+			sticker.setItemName((String) objects[i++]);
+			sticker.setItemType((String)objects[i++]);
+			sticker.setStockInPrice((float)objects[i++]);
+			sticker.setCurrentPrice((float)objects[i++]);
+			stickerList.add(sticker);
+		}
+
+		return stickerList;
+	}
 	
 	/*public String assignedToSSA(Elder elder) {
 
