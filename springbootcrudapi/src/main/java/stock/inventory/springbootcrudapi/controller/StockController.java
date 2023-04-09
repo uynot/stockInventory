@@ -47,10 +47,9 @@ public class StockController {
 	@GetMapping("/stock/getStockFull")
 	public StockGetResponse getStockFull() {
 		StockGetResponse response = new StockGetResponse();
-		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
 		QuantityByItemType quantityByItemType = new QuantityByItemType();
-		
 		ListByItemType listByItemType = new ListByItemType();
+		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
 		
 		List<ItemStock> capsuleList = new ArrayList<ItemStock>();
 		List<Map<String,Object>> capsules = new ArrayList<Map<String,Object>>();
@@ -157,8 +156,6 @@ public class StockController {
 		}
 		return response;
 	}
-	
-	//get full list (group by quantity)
 	
 	//get by type method
 	
