@@ -11,8 +11,9 @@ import jakarta.persistence.Query;
 //import org.hibernate.query.Query;
 
 import org.hibernate.Session;
+
+import stock.inventory.springbootcrudapi.CustomEntity.QuantityByItemType;
 import stock.inventory.springbootcrudapi.model.ItemStock;
-import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @Repository
 public class StockDAOImpl implements StockDAO {
@@ -31,14 +32,16 @@ public class StockDAOImpl implements StockDAO {
 		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
 		ItemStock itemStock = null;
 		String sql = "SELECT "
-				   + "s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
+				   + "	s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
 				   + "FROM item_stock s "
 				   + "JOIN item item ON item.item_id = s.item_id_fk "
 				   + "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
 				   + "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
 				   + "JOIN price p ON p.item_id_fk = item.item_id "
 				   + "WHERE t.action = 'buy' "
-				   + "AND s.status = 'available'";
+				   + "	AND s.status = 'available' "
+				   + "ORDER BY t.trade_time "
+				   + "	AND s.stock_id";
 	
 		Query query = em.createNativeQuery(sql);
 		
@@ -113,7 +116,9 @@ public class StockDAOImpl implements StockDAO {
 				   + "JOIN price p ON p.item_id_fk = item.item_id "
 				   + "WHERE t.action = 'buy' "
 				   + "	AND type.item_type_id = '1' "
-				   + "	AND s.status = 'available'";
+				   + "	AND s.status = 'available' "
+				   + "ORDER BY t.trade_time "
+				   + "	AND s.stock_id";
 	
 		Query query = em.createNativeQuery(sql);
 		
@@ -146,7 +151,9 @@ public class StockDAOImpl implements StockDAO {
 				   + "JOIN price p ON p.item_id_fk = item.item_id "
 				   + "WHERE t.action = 'buy' "
 				   + "	AND type.item_type_id = '2' "
-				   + "	AND s.status = 'available'";
+				   + "	AND s.status = 'available' "
+				   + "ORDER BY t.trade_time "
+				   + "	AND s.stock_id";
 	
 		Query query = em.createNativeQuery(sql);
 		
@@ -179,7 +186,9 @@ public class StockDAOImpl implements StockDAO {
 				   + "JOIN price p ON p.item_id_fk = item.item_id "
 				   + "WHERE t.action = 'buy' "
 				   + "	AND type.item_type_id = '3' "
-				   + "	AND s.status = 'available'";
+				   + "	AND s.status = 'available' "
+				   + "ORDER BY t.trade_time "
+				   + "	AND s.stock_id";
 	
 		Query query = em.createNativeQuery(sql);
 		
@@ -212,7 +221,9 @@ public class StockDAOImpl implements StockDAO {
 				   + "JOIN price p ON p.item_id_fk = item.item_id "
 				   + "WHERE t.action = 'buy' "
 				   + "	AND type.item_type_id = '4' "
-				   + "	AND s.status = 'available'";
+				   + "	AND s.status = 'available' "
+				   + "ORDER BY t.trade_time "
+				   + "	AND s.stock_id";
 	
 		Query query = em.createNativeQuery(sql);
 		
@@ -229,6 +240,41 @@ public class StockDAOImpl implements StockDAO {
 		}
 
 		return stickerList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ItemStock> getStockByItemType(String itemType) {
+		List<ItemStock> stockByItemTypeList = new ArrayList<ItemStock>();
+		ItemStock stock= null;
+		String sql = "SELECT "
+				+ "   s.stock_id, item.item_name, type.item_type, t.price as stock_in_price , p.current_price "
+				+ "FROM item_stock s "
+				+ "JOIN item item ON item.item_id = s.item_id_fk "
+				+ "JOIN item_type type ON type.item_type_id = item.item_type_id_fk "
+				+ "JOIN transaction t ON t.transaction_id = s.transaction_id_fk "
+				+ "JOIN price p ON p.item_id_fk = item.item_id "
+				+ "WHERE t.action = 'buy' "
+				+ "	AND type.item_type = '" + itemType + "' "
+				+ "	AND s.status = 'available' "
+				+ "ORDER BY t.trade_time "
+				+ "	AND s.stock_id";
+	
+		Query query = em.createNativeQuery(sql);
+		
+		List<Object[]> results = query.getResultList();
+		for (Object[] objects : results) {
+			int i = 0;
+			stock = new ItemStock();
+			stock.setStockId((int)objects[i++]);
+			stock.setItemName((String) objects[i++]);
+			stock.setItemType((String)objects[i++]);
+			stock.setStockInPrice((float)objects[i++]);
+			stock.setCurrentPrice((float)objects[i++]);
+			stockByItemTypeList.add(stock);
+		}
+
+		return stockByItemTypeList;
 	}
 	
 	/*public String assignedToSSA(Elder elder) {

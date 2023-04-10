@@ -1,4 +1,4 @@
-package stock.inventory.springbootcrudapi.utility;
+package stock.inventory.springbootcrudapi.CustomEntity;
 
 import java.util.List;
 import java.util.Map;

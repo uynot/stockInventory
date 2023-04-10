@@ -25,15 +25,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import stock.inventory.springbootcrudapi.CustomEntity.ListByItemType;
+import stock.inventory.springbootcrudapi.CustomEntity.QuantityByItemType;
 import stock.inventory.springbootcrudapi.model.ItemStock;
 import stock.inventory.springbootcrudapi.request.CapsuleROIRequest;
 import stock.inventory.springbootcrudapi.request.SaveCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.request.UpdateCapsuleStockRequest;
 import stock.inventory.springbootcrudapi.response.CapsuleStockROIResponse;
+import stock.inventory.springbootcrudapi.response.StockGetByItemTypeResponse;
 import stock.inventory.springbootcrudapi.response.StockGetResponse;
 import stock.inventory.springbootcrudapi.service.StockService;
-import stock.inventory.springbootcrudapi.utility.ListByItemType;
-import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @RestController
 @RequestMapping("/api")
@@ -44,7 +45,7 @@ public class StockController {
 	
 	//Full Delta
 	
-	@GetMapping("/stock/getStockFull")
+	@GetMapping("/stock/full")
 	public StockGetResponse getStockFull() {
 		StockGetResponse response = new StockGetResponse();
 		QuantityByItemType quantityByItemType = new QuantityByItemType();
@@ -158,10 +159,65 @@ public class StockController {
 	}
 	
 	//get by type method
-	
-	//
-	
-	//
+	@GetMapping("/stock/type/{itemType}")
+	public StockGetByItemTypeResponse getStockByItemType(@PathVariable String itemType) throws Exception {
+		//require	{
+		//				"capsule"
+		//			}
+		StockGetByItemTypeResponse response = new StockGetByItemTypeResponse();
+		List<ItemStock> itemStockList = new ArrayList<ItemStock>();
+		List<Map<String,Object>> stocks = new ArrayList<Map<String,Object>>();
+		
+		String itemTypeLowerCased = itemType.toLowerCase();
+		String itemTypeFirstLetterUpperCased = itemTypeLowerCased.substring(0, 1).toUpperCase() + itemTypeLowerCased.substring(1);
+		
+		response.setCode("GET_STOCK_BY_ITEM_TYPE_FAIL");
+		response.setStatus("Failed");
+		response.setError(null);
+		response.setMsg(null);
+		response.setItemQuantity(0);
+		response.setDataByItemType(null);
+		
+		try {
+			if (itemType.isBlank()) {
+				response.setItemType("unknown");
+			} else {
+				response.setItemType(itemTypeLowerCased);
+				
+				itemStockList = stockService.getStockByItemType(itemTypeLowerCased);
+				
+				if(itemStockList.size() > 0) {
+					response.setCode("GET_STOCK_BY_ITEM_TYPE_SUCCESS");
+					response.setStatus("Success");
+					response.setMsg("Record not found");
+					//throw new RuntimeException("Record not found");
+				} else {
+					for(ItemStock itemStock : itemStockList) {
+							Map<String,Object> sticker;
+							sticker = new HashMap<String,Object>();
+							sticker.put("stockId", itemStock.getStockId());
+							sticker.put("itemName", itemStock.getItemName());
+							sticker.put("itemType", itemStock.getItemType());
+							sticker.put("stockInPrice", itemStock.getStockInPrice());
+							sticker.put("currentPrice", itemStock.getCurrentPrice());
+							stocks.add(sticker);
+					}
+					
+					response.setCode("GET_STOCK_BY_ITEM_TYPE_SUCCESS");
+					response.setMsg("Get stock record by " + itemTypeFirstLetterUpperCased + " successfully");
+					response.setStatus("Success");
+					response.setItemQuantity(itemStockList.size());
+					response.setDataByItemType(stocks);
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			response.setError(e.getMessage());
+			response.setMsg("Error occupied when getting stock record by " + itemTypeFirstLetterUpperCased + ".");
+		}
+		
+		return response;
+	}
 	
 //	@GetMapping("/capsule/getCapsuleStock/{tradeId}")
 //	public CapsuleStockStandardResponse getCapsuleStockSingle(@PathVariable Integer tradeId) throws Exception {

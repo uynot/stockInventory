@@ -1,8 +1,8 @@
 package stock.inventory.springbootcrudapi.dao;
 import java.util.List;
 
+import stock.inventory.springbootcrudapi.CustomEntity.QuantityByItemType;
 import stock.inventory.springbootcrudapi.model.ItemStock;
-import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 public interface StockDAO {
 	
@@ -17,6 +17,8 @@ public interface StockDAO {
 	List<ItemStock> getSkinFull();
 
 	List<ItemStock> getStickerFull();
+
+	List<ItemStock> getStockByItemType(String itemType);
 	
 	//ItemStock getCapsuleStockSingle(int tradeId);
 	

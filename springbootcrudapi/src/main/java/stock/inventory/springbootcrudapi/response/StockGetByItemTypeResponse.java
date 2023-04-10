@@ -3,21 +3,18 @@ package stock.inventory.springbootcrudapi.response;
 import java.util.List;
 import java.util.Map;
 
-import stock.inventory.springbootcrudapi.CustomEntity.ListByItemType;
-import stock.inventory.springbootcrudapi.CustomEntity.QuantityByItemType;
 import stock.inventory.springbootcrudapi.model.ItemStock;
 
 //@data
-public class StockGetResponse {
+public class StockGetByItemTypeResponse {
 	
 	private String code;
 	private String status;
 	private String error;
 	private String msg;
+	private String itemType;
 	private int itemQuantity;
-	private QuantityByItemType quantityByItemType;
-//  private List<ItemStock> data;
-    private ListByItemType data;
+    private List<Map<String,Object>> dataByItemType;
     
 	public String getCode() {
 		return code;
@@ -47,34 +44,24 @@ public class StockGetResponse {
 		this.msg = msg;
 	}
 	
-//	public List<ItemStock> getData() {
-//		return data;
-//	}
-//	public void setData(List<ItemStock> data) {
-//		this.data = data;
-//	}
+	public String getItemType() {
+		return itemType;
+	}
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
 	
 	public int getItemQuantity() {
 		return itemQuantity;
 	}
-	
-	public ListByItemType getData() {
-		return data;
-	}
-	
-	public void setData(ListByItemType data) {
-		this.data = data;
-	}
-	
 	public void setItemQuantity(int itemQuantity) {
 		this.itemQuantity = itemQuantity;
 	}
 	
-	public QuantityByItemType getQuantityByItemType() {
-		return quantityByItemType;
+	public List<Map<String,Object>> getDataByItemType() {
+		return dataByItemType;
 	}
-	
-	public void setQuantityByItemType(QuantityByItemType quantityByItemType) {
-		this.quantityByItemType = quantityByItemType;
+	public void setDataByItemType(List<Map<String,Object>> dataByItemType) {
+		this.dataByItemType = dataByItemType;
 	}
 }
