@@ -186,7 +186,7 @@ public class StockController {
 				
 				itemStockList = stockService.getStockByItemType(itemTypeLowerCased);
 				
-				if(itemStockList.size() > 0) {
+				if(itemStockList.size() == 0) {
 					response.setCode("GET_STOCK_BY_ITEM_TYPE_SUCCESS");
 					response.setStatus("Success");
 					response.setMsg("Record not found");
