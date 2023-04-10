@@ -1,8 +1,9 @@
 package stock.inventory.springbootcrudapi.service;
 
 import java.util.List;
+
+import stock.inventory.springbootcrudapi.CustomEntity.QuantityByItemType;
 import stock.inventory.springbootcrudapi.model.ItemStock;
-import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 public interface StockService {
 	
@@ -17,6 +18,8 @@ public interface StockService {
 	List<ItemStock> getSkinFull();
 
 	List<ItemStock> getStickerFull();
+
+	List<ItemStock> getStockByItemType(String itemType);
 	
 	//ItemStock getCapsuleStockSingle(int tradeId);
 	

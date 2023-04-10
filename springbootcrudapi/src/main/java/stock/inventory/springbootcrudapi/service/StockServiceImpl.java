@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import stock.inventory.springbootcrudapi.CustomEntity.QuantityByItemType;
 import stock.inventory.springbootcrudapi.dao.StockDAO;
 import stock.inventory.springbootcrudapi.model.ItemStock;
-import stock.inventory.springbootcrudapi.utility.QuantityByItemType;
 
 @Service
 public class StockServiceImpl implements StockService{
@@ -43,6 +43,11 @@ public class StockServiceImpl implements StockService{
 	@Override
 	public List<ItemStock> getStickerFull() {
 		return stockDAO.getStickerFull();
+	}
+	
+	@Override
+	public List<ItemStock> getStockByItemType(String itemType) {
+		return stockDAO.getStockByItemType(itemType);
 	}
 	
 //	@Transactional
